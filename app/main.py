@@ -1,5 +1,5 @@
 from __future__ import annotations
-
+from fastapi.middleware.cors import CORSMiddleware 
 from contextlib import asynccontextmanager
 from datetime import datetime, timedelta
 from typing import Any
@@ -8,6 +8,7 @@ import os
 from fastapi import FastAPI, HTTPException, Query, UploadFile, File
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from app.services.virginia_grid import VirginiaGridService
@@ -34,6 +35,23 @@ app = FastAPI(
     description="Real-time Virginia grid carbon intensity + code energy/emissions estimation",
     version="1.0.0",
     lifespan=lifespan,
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["*"],
+)
+
+
+# CORS — open access from any origin (no security on endpoints)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Mount landing page at /landing
