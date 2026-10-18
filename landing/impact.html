@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CarbonSense — AI & Code Carbon Impact, research sources, and interactive AI carbon game">
+  <title>AI Carbon Impact — CarbonSense</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-void-black: #040506;
+      --color-ink: #07080a;
+      --color-obsidian: #111214;
+      --color-graphite: #1b1c1e;
+      --color-smoke: #6a6b6c;
+      --color-ash: #9c9c9d;
+      --color-mist: #e6e6e6;
+      --color-iron: #454647;
+      --color-slate: #2f3031;
+      --color-pure-white: #ffffff;
+      --color-brand-green: #00c573;
+      --color-brand-green-dim: rgba(0, 197, 115, 0.15);
+      --color-ember-hush: #2a1a1c;
+      --color-electric-sky: #63a1ff;
+      --color-cobalt-edge: #143ca3;
+      --color-deep-space: #02193b;
+      --color-info-blue: #56c2ff;
+      --color-success-green: #59d499;
+
+      --font-inter: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-geistmono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+      --text-eyebrow: 11px;
+      --leading-eyebrow: 0.91;
+      --tracking-eyebrow: 0.8px;
+      --text-body: 16px;
+      --leading-body: 1.15;
+      --tracking-body: 0px;
+      --text-body-lg: 18px;
+      --leading-body-lg: 1.15;
+      --tracking-body-lg: 0px;
+      --text-subheading: 20px;
+      --leading-subheading: 1.2;
+      --tracking-subheading: 0.2px;
+      --text-heading-sm: 24px;
+      --leading-heading-sm: 1.15;
+      --tracking-heading-sm: 0px;
+      --text-heading: 32px;
+      --leading-heading: 1.15;
+      --tracking-heading: 0px;
+      --text-heading-lg: 56px;
+      --leading-heading-lg: 1.17;
+      --tracking-heading-lg: 0.22px;
+      --text-display: 64px;
+      --leading-display: 1.1;
+      --tracking-display: 0px;
+
+      --font-weight-light: 300;
+      --font-weight-regular: 400;
+      --font-weight-medium: 500;
+      --font-weight-semibold: 600;
+      --font-weight-bold: 700;
+
+      --spacing-8: 8px;
+      --spacing-16: 16px;
+      --spacing-24: 24px;
+      --spacing-32: 32px;
+      --spacing-40: 40px;
+      --spacing-48: 48px;
+      --spacing-64: 64px;
+      --spacing-80: 80px;
+      --spacing-96: 96px;
+      --spacing-120: 120px;
+
+      --page-max-width: 1200px;
+      --section-gap: 80px;
+      --card-padding: 24px;
+      --element-gap: 8px;
+
+      --radius-lg: 8px;
+      --radius-2xl: 16px;
+      --radius-full: 9999px;
+
+      --shadow-key: rgba(255, 255, 255, 0.05) 0px 1px 0px 0px inset,
+                    rgba(255, 255, 255, 0.25) 0px 0px 0px 1px,
+                    rgba(0, 0, 0, 0.2) 0px -1px 0px 0px inset;
+      --shadow-key-hover: rgba(255, 255, 255, 0.08) 0px 1px 0px 0px inset,
+                          rgba(0, 197, 115, 0.25) 0px 0px 0px 1px,
+                          rgba(0, 0, 0, 0.25) 0px -1px 0px 0px inset;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-inter);
+      font-size: var(--text-body);
+      line-height: var(--leading-body);
+      letter-spacing: var(--tracking-body);
+      font-weight: var(--font-weight-regular);
+      color: var(--color-pure-white);
+      background: var(--color-void-black);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      width: 100%;
+      max-width: var(--page-max-width);
+      margin: 0 auto;
+      padding: 0 var(--spacing-32);
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse-green {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(0, 197, 115, 0.4); }
+      50% { box-shadow: 0 0 0 12px rgba(0, 197, 115, 0); }
+    }
+
+    @keyframes fill-meter {
+      to { height: 0%; }
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .animate-fade-in { animation: fadeInUp 0.7s ease-out forwards; }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+
+    .cursor {
+      display: inline-block;
+      width: 8px;
+      height: 1em;
+      background: var(--color-brand-green);
+      animation: blink 1s infinite;
+      vertical-align: text-bottom;
+    }
+
+    /* Glass Nav */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      height: 56px;
+      background: rgba(4, 5, 6, 0.7);
+      backdrop-filter: blur(48px);
+      border: 1px solid var(--color-slate);
+      border-radius: var(--radius-full);
+      margin: var(--spacing-16);
+      padding: 0 var(--spacing-20);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .nav__logo {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-8);
+      font-family: var(--font-inter);
+      font-size: 13px;
+      font-weight: var(--font-weight-medium);
+      letter-spacing: var(--tracking-body);
+      color: var(--color-pure-white);
+    }
+
+    .nav__logo-mark {
+      width: 20px;
+      height: 20px;
+      background: var(--color-brand-green);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav__logo-mark svg {
+      width: 12px;
+      height: 12px;
+      stroke: var(--color-void-black);
+    }
+
+    .nav__links {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-24);
+    }
+
+    .nav__link {
+      font-family: var(--font-inter);
+      font-size: 13px;
+      font-weight: var(--font-weight-medium);
+      letter-spacing: 0px;
+      color: var(--color-ash);
+      transition: color 0.2s ease;
+    }
+
+    .nav__link:hover {
+      color: var(--color-brand-green);
+    }
+
+    .nav__actions {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-12);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-8);
+      font-family: var(--font-inter);
+      font-size: 13px;
+      font-weight: var(--font-weight-medium);
+      letter-spacing: 0px;
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-8) var(--spacing-16);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .btn--filled {
+      background: var(--color-mist);
+      color: var(--color-iron);
+    }
+
+    .btn--filled:hover {
+      background: var(--color-ash);
+      transform: translateY(-1px);
+    }
+
+    .btn--ghost {
+      background: transparent;
+      color: var(--color-pure-white);
+      border-color: transparent;
+    }
+
+    .btn--ghost:hover {
+      color: var(--color-brand-green);
+    }
+
+    .btn--brand {
+      background: var(--color-brand-green);
+      color: var(--color-void-black);
+      border-color: var(--color-brand-green);
+    }
+
+    .btn--brand:hover {
+      background: var(--color-success-green);
+      transform: translateY(-1px);
+    }
+
+    .btn--sm {
+      font-size: 11px;
+      padding: var(--spacing-6) var(--spacing-12);
+    }
+
+    /* Hero */
+    .hero {
+      padding: var(--spacing-96) var(--spacing-32) var(--spacing-64);
+      text-align: center;
+    }
+
+    .hero__tagline {
+      font-family: var(--font-geistmono);
+      font-size: var(--text-eyebrow);
+      font-weight: var(--font-weight-medium);
+      letter-spacing: var(--tracking-eyebrow);
+      color: var(--color-brand-green);
+      text-transform: uppercase;
+      margin-bottom: var(--spacing-16);
+      animation: fadeInUp 0.6s ease-out forwards;
+    }
+
+    .hero__title {
+      font-family: var(--font-inter);
+      font-size: var(--text-heading-lg);
+      font-weight: var(--font-weight-regular);
+      line-height: var(--leading-heading-lg);
+      letter-spacing: var(--tracking-heading-lg);
+      color: var(--color-pure-white);
+      margin-bottom: var(--spacing-16);
+      animation: fadeInUp 0.7s ease-out forwards;
+    }
+
+    .hero__title .highlight { color: var(--color-brand-green); }
+
+    .hero__subtitle {
+      font-family: var(--font-inter);
+      font-size: var(--text-body-lg);
+      font-weight: var(--font-weight-regular);
+      line-height: var(--leading-body-lg);
+      letter-spacing: var(--tracking-body-lg);
+      color: var(--color-ash);
+      max-width: 560px;
+      margin: 0 auto var(--spacing-32);
+      animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    /* Side-by-side layout */
+    .side-by-side {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-48);
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .side-by-side { grid-template-columns: 1fr; gap: var(--spacing-32); }
+    }
+
+    /* Section header */
+    .section__header {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-12);
+      margin-bottom: var(--spacing-40);
+    }
+
+    .section__eyebrow {
+      font-family: var(--font-geistmono);
+      font-size: var(--text-eyebrow);
+      font-weight: var(--font-weight-medium);
+      letter-spacing: var(--tracking-eyebrow);
+      color: var(--color-brand-green);
+      text-transform: uppercase;
+    }
+
+    .section__title {
+      font-family: var(--font-inter);
+      font-size: var(--text-heading);
+      font-weight: var(--font-weight-medium);
+      line-height: var(--leading-heading);
+      letter-spacing: var(--tracking-heading);
+      color: var(--color-pure-white);
+    }
+
+    .section__desc {
+      font-family: var(--font-inter);
+      font-size: var(--text-body-lg);
+      font-weight: var(--font-weight-regular);
+      line-height: var(--leading-body-lg);
+      letter-spacing: var(--tracking-body-lg);
+      color: var(--color-smoke);
+      max-width: 480px;
+    }
+
+    /* Cards — keyboard key treatment */
+    .card-key {
+      background: transparent;
+      border: 1px solid var(--color-slate);
+      border-radius: var(--radius-2xl);
+      padding: var(--card-padding);
+      box-shadow: var(--shadow-key);
+      transition: all 0.2s ease;
+    }
+
+    .card-key:hover {
+      border-color: var(--color-brand-green);
+      box-shadow: var(--shadow-key-hover);
+      transform: translateY(-2px);
+    }
+
+    /* Stat cards */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--spacing-16);
+      margin-bottom: var(--spacing-40);
+    }
+
+    @media (max-width: 900px) {
+      .stat-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .stat-card {
+      background: transparent;
+      border: 1px solid var(--color-slate);
+      border-radius: var(--radius-2xl);
+      padding: var(--spacing-24);
+      box-shadow: var(--shadow-key);
+      transition: all 0.2s ease;
+    }
+
+    .stat-card__label {
+      font-family: var(--font-geistmono);
+      font-size: 10px;
+      font-weight: var(--font-weight-medium);
+      letter-spacing: 0.05em;
+      color: var(--color-smoke);
+      text-transform: uppercase;
+      margin-bottom: var(--spacing-8);
+    }
+
+    .stat-card__value {
+      font-family: 'SF Pro Text', var(--font-inter);
+      font-size: 32px;
+      font-weight: var(--font-weight-medium);
+      line-height: 1.15;
+      color: var(--color-pure-white);
+      display: block;
+      margin-bottom: var(--spacing-4);
+    }
+
+    .stat-card__sub {
+      font-family: var(--font-inter);
+      font-size: 13px;
+      font-weight: var(--font-weight-regular);
+      color: var(--color-ash);
+    }
+
+    /* Citation style */
+    .cite {
+      color: var(--color-brand-green);
+      font-family: var(--font-geistmono);
+      font-size: 10px;
+      font-weight: var(--font-weight-medium);
+      letter-spacing: 0.05em;
+    }
+
+    p, li {
+      font-family: var(--font-inter);
+      font-size: var(--text-body-sm);
+      line-height: 1.6;
+      color: var(--color-smoke);
+    }
+
+    li { margin-bottom: var(--spacing-8); }
+
+    h3 {
+      font-family: var(--font-inter);
+      font-size: var(--text-subheading);
+      font-weight: var(--font-weight-medium);
+      letter-spacing: var(--tracking-subheading);
+      color: var(--color-pure-white);
+      margin-bottom: var(--spacing-12);
+    }
+
+    /* Sources section */
+    .sources-list {
+      font-family: var(--font-geistmono);
+      font-size: 11px;
+      line-height: 1.8;
+      color: var(--color-smoke);
+    }
+
+    .sources-list li {
+      margin-bottom: var(--spacing-12);
+    }
+
+    .sources-list a {
+      color: var(--color-brand-green);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0, 197, 115, 0.3);
+    }
+
+    .sources-list a:hover {
+      color: var(--color-success-green);
+      border-bottom-color: var(--color-success-green);
+    }
+
+    /* Badge */
+    .badge {
+      font-family: var(--font-inter);
+      font-size: 11px;
+      font-weight: var(--font-weight-medium);
+      letter-spacing: 0px;
+      color: var(--color-pure-white);
+      background: var(--color-graphite);
+      border-radius: var(--radius-full);
+      padding: 0 var(--spacing-8);
+      height: 20px;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .badge--green {
+      background: var(--color-brand-green-dim);
+      color: var(--color-brand-green);
+      border: 1px solid rgba(0, 197, 115, 0.3);
+    }
+
+    /* Terminal */
+    .terminal-wrap {
+      background: var(--color-void-black);
+      border: 1px solid var(--color-slate);
+      border-radius: var(--radius-2xl);
+      padding: var(--spacing-32);
+      box-shadow: var(--shadow-key);
+      font-family: var(--font-geistmono);
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--color-ash);
+    }
+
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-8);
+      margin-bottom: var(--spacing-16);
+      padding-bottom: var(--spacing-12);
+      border-bottom: 1px solid var(--color-slate);
+    }
+
+    .terminal-dots {
+      display: flex;
+      gap: var(--spacing-6);
+    }
+
+    .terminal-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .terminal-dot--red { background: var(--color-graphite); }
+    .terminal-dot--yellow { background: var(--color-graphite); }
+    .terminal-dot--green { background: var(--color-brand-green); }
+
+    .terminal-title {
+      font-family: var(--font-inter);
+      font-size: 12px;
+      font-weight: var(--font-weight-medium);
+      letter-spacing: 0px;
+      color: var(--color-ash);
+      margin-left: auto;
+    }
+
+    .terminal-line {
+      margin: var(--spacing-6) 0;
+      white-space: pre-wrap;
+    }
+
+    .terminal-line--prompt { color: var(--color-brand-green); }
+    .terminal-line--cmd { color: var(--color-pure-white); }
+    .terminal-line--out { color: var(--color-smoke); }
+    .terminal-line--hi { color: var(--color-brand-green); font-weight: var(--font-weight-medium); }
+
+    /* ============ GAME: AI CARBON METER ============ */
+    .game-wrap {
+      background: var(--color-ink);
+      border: 1px solid var(--color-slate);
+      border-radius: var(--radius-2xl);
+      padding: var(--spacing-40);
+      box-shadow: var(--shadow-key);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .game-header {
+      margin-bottom: var(--spacing-32);
+    }
+
+    .game-title {
+      font-family: var(--font-inter);
+      font-size: var(--text-heading-sm);
+      font-weight: var(--font-weight-medium);
+      line-height: var(--leading-heading-sm);
+      letter-spacing: var(--tracking-heading-sm);
+      color: var(--color-pure-white);
+      margin-bottom: var(--spacing-16);
+    }
+
+    .game-desc {
+      font-family: var(--font-inter);
+      font-size: var(--text-body-sm);
+      line-height: 1.6;
+      color: var(--color-smoke);
+      margin-bottom: var(--spacing-24);
+      max-width: 520px;
+    }
+
+    /* Meter */
+    .meter-container {
+      width: 100%;
+      height: 12px;
+      background: var(--color-graphite);
+      border-radius: var(--radius-full);
+      margin-bottom: var(--spacing-20);
+      overflow: hidden;
+      border: 1px solid var(--color-slate);
+    }
+
+    .meter-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--color-brand-green), var(--color-success-green));
+      width: 0%;
+      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .meter-fill::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      background-size: 200% 100%;
+      animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    .meter-label {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-geistmono);
+      font-size: 11px;
+      color: var(--color-ash);
+      margin-bottom: var(--spacing-8);
+    }
+
+    .meter-danger {
+      color: var(--color-brand-green);
+    }
+
+    /* Game controls */
+    .game-controls {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--spacing-12);
+      margin-bottom: var(--spacing-24);
+    }
+
+    @media (max-width: 640px) {
+      .game-controls { grid-template-columns: 1fr; }
+    }
+
+    .game-btn {
+      background: var(--color-obsidian);
+      border: 1px solid var(--color-slate);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-16);
+      font-family: var(--font-inter);
+      font-size: 12px;
+      font-weight: var(--font-weight-medium);
+      color: var(--color-pure-white);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: left;
+    }
+
+    .game-btn:hover {
+      border-color: var(--color-brand-green);
+      background: var(--color-brand-green-dim);
+      transform: translateY(-2px);
+    }
+
+    .game-btn:active {
+      transform: translateY(0);
+    }
+
+    .game-btn__name {
+      font-weight: var(--font-weight-medium);
+      color: var(--color-pure-white);
+      display: block;
+      margin-bottom: var(--spacing-4);
+    }
+
+    .game-btn__co2 {
+      font-family: var(--font-geistmono);
+      font-size: 11px;
+      color: var(--color-smoke);
+    }
+
+    .game-btn__co2--high { color: #ff6363; }
+    .game-btn__co2--med { color: var(--color-electric-sky); }
+    .game-btn__co2--low { color: var(--color-brand-green); }
+
+    /* Game results */
+    .game-result {
+      margin-top: var(--spacing-24);
+      padding: var(--spacing-20);
+      background: var(--color-obsidian);
+      border: 1px solid var(--color-slate);
+      border-radius: var(--radius-lg);
+      display: none;
+    }
+
+    .game-result.show {
+      display: block;
+      animation: fadeInUp 0.5s ease-out forwards;
+    }
+
+    .game-result__title {
+      font-family: var(--font-inter);
+      font-size: var(--text-subheading);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-pure-white);
+      margin-bottom: var(--spacing-8);
+    }
+
+    .game-result__value {
+      font-family: 'SF Pro Text', var(--font-inter);
+      font-size: 40px;
+      font-weight: var(--font-weight-medium);
+      color: var(--color-brand-green);
+      display: block;
+      margin-bottom: var(--spacing-4);
+    }
+
+    .game-result__note {
+      font-family: var(--font-inter);
+      font-size: 13px;
+      color: var(--color-smoke);
+      line-height: 1.5;
+    }
+
+    .game-character {
+      margin-top: var(--spacing-24);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-16);
+    }
+
+    .character-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-full);
+      background: var(--color-graphite);
+      border: 2px solid var(--color-slate);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+      transition: transform 0.3s ease, filter 0.3s ease;
+    }
+
+    .character-avatar--hot {
+      filter: hue-rotate(-50deg) saturate(1.5);
+      animation: shake 0.5s infinite;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-4px); }
+      75% { transform: translateX(4px); }
+    }
+
+    .character-info {
+      flex: 1;
+    }
+
+    .character-name {
+      font-family: var(--font-inter);
+      font-size: 16px;
+      font-weight: var(--font-weight-medium);
+      color: var(--color-pure-white);
+    }
+
+    .character-status {
+      font-family: var(--font-geistmono);
+      font-size: 11px;
+      color: var(--color-ash);
+    }
+
+    /* Reset button */
+    .game-reset {
+      margin-top: var(--spacing-20);
+      background: transparent;
+      border: 1px solid var(--color-slate);
+      color: var(--color-smoke);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-8) var(--spacing-16);
+      font-family: var(--font-inter);
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .game-reset:hover {
+      border-color: var(--color-brand-green);
+      color: var(--color-brand-green);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      :root {
+        --text-heading-lg: 40px;
+        --text-heading: 28px;
+      }
+      .nav { margin: var(--spacing-12); }
+      .hero { padding: var(--spacing-80) var(--spacing-24) var(--spacing-64); }
+      .stat-grid { grid-template-columns: 1fr; }
+      .side-by-side { grid-template-columns: 1fr; }
+      .game-controls { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body class="animate-fade-in">
+
+  <nav class="nav" id="nav">
+    <div class="nav__inner">
+      <a href="index.html" class="nav__logo" aria-label="CarbonSense home">
+        <span class="nav__logo-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </span>
+        CarbonSense
+      </a>
+      <div class="nav__links">
+        <a href="index.html" class="nav__link">Home</a>
+        <a href="docs.html" class="nav__link">API Docs</a>
+        <a href="contact.html" class="nav__link">Contact</a>
+        <a href="impact.html" class="nav__link nav__link--active">AI Impact</a>
+      </div>
+      <div class="nav__actions">
+        <a href="index.html" class="btn btn--ghost">Back to Home</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero" aria-labelledby="impact-title">
+      <div class="container">
+        <p class="hero__tagline delay-1">Research & Impact</p>
+        <h1 id="impact-title" class="hero__title delay-2">
+          AI Carbon<span class="highlight"> Impact</span>
+        </h1>
+        <p class="hero__subtitle delay-3">
+          How AI model usage relates to CO₂ emissions — with cited research, Virginia grid context, and an interactive usage meter.
+        </p>
+      </div>
+    </section>
+
+    <!-- Stats — side by side -->
+    <section class="section" style="padding: var(--spacing-96) var(--spacing-32);">
+      <div class="container">
+        <div class="stat-grid">
+          <div class="stat-card animate-fade-in delay-1">
+            <span class="stat-card__label">HF models trained</span>
+            <span class="stat-card__value" id="stat-hf" data-target="60000">0</span>
+            <span class="stat-card__sub">metric tons CO₂e (5,227 models)</span>
+          </div>
+          <div class="stat-card animate-fade-in delay-2">
+            <span class="stat-card__label">LLM-assisted code</span>
+            <span class="stat-card__value" id="stat-llm" data-target="32.72">0</span>
+            <span class="stat-card__sub">× higher footprint than manual</span>
+          </div>
+          <div class="stat-card animate-fade-in delay-3">
+            <span class="stat-card__label">Reasoning AI prompts</span>
+            <span class="stat-card__value" id="stat-reason" data-target="50">0</span>
+            <span class="stat-card__sub">× more CO₂ than concise answers</span>
+          </div>
+          <div class="stat-card animate-fade-in delay-4">
+            <span class="stat-card__label">PJM CO₂ drop</span>
+            <span class="stat-card__value" id="stat-pjm" data-target="43">0</span>
+            <span class="stat-card__sub">% since 2005 (2023)</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Research findings — side by side -->
+    <section id="research" class="section" style="padding: var(--spacing-96) var(--spacing-32);">
+      <div class="container">
+        <div class="section__header">
+          <p class="section__eyebrow">What the research shows</p>
+          <h2 class="section__title">Cited findings on AI & code emissions</h2>
+          <p class="section__desc">Peer-reviewed studies and open tools that quantify the carbon footprint of AI training, inference, and developer workflows.</p>
+        </div>
+
+        <div class="side-by-side">
+          <div class="card-key animate-fade-in delay-1">
+            <h3 class="section__title" style="font-size:var(--text-subheading);margin-bottom:var(--spacing-12);">Training emissions at scale</h3>
+            <p style="font-family:var(--font-inter);font-size:var(--text-body-sm);color:var(--color-smoke);line-height:1.6;margin-bottom:var(--spacing-16);">
+              An analysis of 5,227 Hugging Face models estimates aggregate training emissions of approximately <span class="cite">[1]</span>60,000 metric tons CO₂e — comparable to the annual emissions of ~42,000 cars. Annual training emissions grew from ~450 tCO₂e (2020–2021) to over 40,000 tCO₂e (2024–2025), nearly two orders of magnitude in five years <span class="cite">[1]</span>.
+            </p>
+            <h3 class="section__title" style="font-size:var(--text-subheading);margin-top:var(--spacing-24);margin-bottom:var(--spacing-12);">Training vs. inference</h3>
+            <p style="font-family:var(--font-inter);font-size:var(--text-body-sm);color:var(--color-smoke);line-height:1.6;margin-bottom:var(--spacing-16);">
+              Hugging Face's BLOOM model emitted ~25 metric tons of CO₂ during training; doubling to ~50 metric tons when including hardware manufacturing, infrastructure, and post-training operation <span class="cite">[2]</span>. GPT-3 training was estimated at over 500 metric tons of CO₂ <span class="cite">[2]</span>.
+            </p>
+          </div>
+
+          <div class="card-key animate-fade-in delay-2">
+            <h3 class="section__title" style="font-size:var(--text-subheading);margin-bottom:var(--spacing-12);">Prompt-level emissions</h3>
+            <p style="font-family:var(--font-inter);font-size:var(--text-body-sm);color:var(--color-smoke);line-height:1.6;margin-bottom:var(--spacing-16);">
+              A study of 14 LLMs found that reasoning-enabled models produce <span class="cite">[3]</span>up to 50 times more CO₂ emissions than concise response models. The most accurate reasoning model (70B parameters) produced three times more emissions than similarly sized concise-answer models <span class="cite">[3]</span>. Users can reduce emissions by prompting for concise answers and reserving high-capacity models for tasks that genuinely require them <span class="cite">[3]</span>.
+            </p>
+            <h3 class="section__title" style="font-size:var(--text-subheading);margin-top:var(--spacing-24);margin-bottom:var(--spacing-12);">LLM-assisted coding</h3>
+            <p style="font-family:var(--font-inter);font-size:var(--text-body-sm);color:var(--color-smoke);line-height:1.6;margin-bottom:var(--spacing-16);">
+              LLM-assisted code generation leads to an average <span class="cite">[4]</span>32.72× higher carbon footprint than manual software development (range: 19.92×–43.81×). For LLM-assisted workflows, 98.68% of the carbon footprint comes from querying the LLM itself <span class="cite">[4]</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Grid context — side by side -->
+    <section class="section" style="padding: var(--spacing-96) var(--spacing-32); background: var(--color-obsidian); border-top: 1px solid var(--color-slate); border-bottom: 1px solid var(--color-slate);">
+      <div class="container">
+        <div class="side-by-side">
+          <div class="card-key animate-fade-in delay-1">
+            <h3 class="section__title" style="font-size:var(--text-subheading);margin-bottom:var(--spacing-12);">Virginia grid context</h3>
+            <p style="font-family:var(--font-inter);font-size:var(--text-body-sm);color:var(--color-smoke);line-height:1.6;margin-bottom:var(--spacing-16);">
+              CarbonSense measures against the PJM Dominion (VA-DOM) zone. PJM's average CO₂ emission rates fell <span class="cite">[5]</span>43% from 2005 to 2023 as cleaner resources replaced older units <span class="cite">[5]</span>. In Virginia, natural gas represents 52% of installed capacity, with hydro at 15% and nuclear at 14% <span class="cite">[6]</span>. Solar represents 41% of new interconnection requests in the state <span class="cite">[6]</span>.
+            </p>
+          </div>
+
+          <div class="card-key animate-fade-in delay-2">
+            <h3 class="section__title" style="font-size:var(--text-subheading);margin-bottom:var(--spacing-12);">Measurement tools</h3>
+            <p style="font-family:var(--font-inter);font-size:var(--text-body-sm);color:var(--color-smoke);line-height:1.6;margin-bottom:var(--spacing-16);">
+              Open-source tools like <span class="cite">[7]</span>CodeCarbon track CO₂ from local compute (CPU, GPU, RAM) using regional grid carbon intensity, while EcoLogits estimates GenAI API impacts across providers like OpenAI, Anthropic, and Mistral <span class="cite">[7]</span>. Frameworks such as LLMCarbon model end-to-end LLM carbon footprints including training, inference, experimentation, and storage <span class="cite">[8]</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Game -->
+    <section id="game" class="section" style="padding: var(--spacing-96) var(--spacing-32);">
+      <div class="container">
+        <div class="section__header">
+          <p class="section__eyebrow">Interactive</p>
+          <h2 class="section__title">AI Carbon Meter — try it yourself</h2>
+          <p class="section__desc">Select AI tasks to see how quickly CO₂ adds up. Based on per-prompt estimates for different model types.</p>
+        </div>
+
+        <div class="game-wrap animate-fade-in delay-1">
+          <div class="game-header">
+            <h2 class="game-title delay-2">Your AI Carbon Footprint</h2>
+            <p class="game-desc delay-3">Each task adds emissions based on real per-prompt estimates. Watch the meter fill as your character uses more AI.</p>
+          </div>
+
+          <div class="meter-label">
+            <span>Emissions</span>
+            <span class="meter-danger" id="meter-value">0 g CO₂</span>
+          </div>
+          <div class="meter-container">
+            <div class="meter-fill" id="meter-fill"></div>
+          </div>
+
+          <div class="game-controls">
+            <button class="game-btn" onclick="addTask('concise', 'Concise text answer', 5)">
+              <span class="game-btn__name">Concise answer</span>
+              <span class="game-btn__co2 game-btn__co2--low">~5 g CO₂</span>
+            </button>
+            <button class="game-btn" onclick="addTask('reasoning', 'Reasoning model (think step-by-step)', 250)">
+              <span class="game-btn__name">Reasoning AI</span>
+              <span class="game-btn__co2 game-btn__co2--med">~250 g CO₂</span>
+            </button>
+            <button class="game-btn" onclick="addTask('image', 'Image generation (Stable Diffusion)', 1500)">
+              <span class="game-btn__name">Image gen</span>
+              <span class="game-btn__co2 game-btn__co2--high">~1,500 g CO₂</span>
+            </button>
+            <button class="game-btn" onclick="addTask('video', 'Video generation (text-to-video)', 5000)">
+              <span class="game-btn__name">Video gen</span>
+              <span class="game-btn__co2 game-btn__co2--high">~5,000 g CO₂</span>
+            </button>
+            <button class="game-btn" onclick="addTask('train', 'Fine-tune small LLM (1 hour)', 50000)">
+              <span class="game-btn__name">Fine-tune LLM</span>
+              <span class="game-btn__co2 game-btn__co2--high">~50,000 g CO₂</span>
+            </button>
+            <button class="game-btn" onclick="addTask('train-large', 'Train foundation model (1 day)', 500000)">
+              <span class="game-btn__name">Train foundation</span>
+              <span class="game-btn__co2 game-btn__co2--high">~500,000 g CO₂</span>
+            </button>
+          </div>
+
+          <div class="game-result" id="game-result">
+            <h3 class="game-result__title">Total emissions</h3>
+            <span class="game-result__value" id="result-total">0</span><span class="game-result__unit" style="font-size:16px;color:var(--color-ash);vertical-align:baseline;"> g CO₂</span>
+            <p class="game-result__note" id="result-note">Start adding tasks to see your impact.</p>
+          </div>
+
+          <div class="game-character">
+            <div class="character-avatar" id="char-avatar">👨‍💻</div>
+            <div class="character-info">
+              <div class="character-name" id="char-name">Dev</div>
+              <div class="character-status" id="char-status">Idle</div>
+            </div>
+          </div>
+
+          <button class="game-reset" onclick="resetGame()">Reset meter</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sources -->
+    <section class="section" style="padding: var(--spacing-96) var(--spacing-32);">
+      <div class="container">
+        <div class="section__header">
+          <p class="section__eyebrow">References</p>
+          <h2 class="section__title">Sources & citations</h2>
+        </div>
+
+        <div class="card-key">
+          <ol class="sources-list">
+            <li><a href="https://arxiv.org/abs/2605.01549" target="_blank" rel="noopener">Hugging Carbon — Quantifying Training Carbon Emissions of AI Models at Scale</a> <span class="cite">[1]</span></li>
+            <li><a href="https://cacm.acm.org/news/the-carbon-footprint-of-artificial-intelligence" target="_blank" rel="noopener">The Carbon Footprint of Artificial Intelligence — Communications of the ACM</a> <span class="cite">[2]</span></li>
+            <li><a href="https://www.frontiersin.org/news/2025/06/19/ai-prompts-50-times-more-co2-emissions" target="_blank" rel="noopener">Some AI prompts cause 50× more CO₂ emissions than others — Frontiers</a> <span class="cite">[3]</span></li>
+            <li><a href="https://arxiv.org/abs/2505.04521" target="_blank" rel="noopener">Comparative Analysis of Carbon Footprint in Manual vs. LLM-Assisted Code Development</a> <span class="cite">[4]</span></li>
+            <li><a href="https://insidelines.pjm.com/emission-rates-in-pjm-reach-all-time-low" target="_blank" rel="noopener">Emission Rates in PJM Reach All-Time Low</a> <span class="cite">[5]</span></li>
+            <li><a href="https://www.pjm.com/-/media/DotCom/library/reports-notices/state-specific-reports/2024/virginia.pdf" target="_blank" rel="noopener">2024 Virginia State Infrastructure Report — PJM</a> <span class="cite">[6]</span></li>
+            <li><a href="https://codecarbon.io/" target="_blank" rel="noopener">CodeCarbon — Measure the environmental footprint of compute & GenAI</a> <span class="cite">[7]</span></li>
+            <li><a href="https://proceedings.iclr.cc/paper_files/paper/2024/file/6b4ac044095525631df38e20919b45d2-Paper-Conference.pdf" target="_blank" rel="noopener">LLMCARBON — Modeling the End-to-End Carbon Footprint of LLMs — ICLR 2024</a> <span class="cite">[8]</span></li>
+          </ol>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <a href="index.html" class="footer__logo" aria-label="CarbonSense home">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+          CarbonSense
+        </a>
+        <p class="footer__meta-item">MIT Licensed · 804 Hacks 2026</p>
+      </div>
+
+      <div class="footer__divider" aria-hidden="true"></div>
+
+      <div class="footer__meta">
+        <span class="footer__meta-item">v1.0.0</span>
+        <span class="footer__pipe">|</span>
+        <span class="footer__meta-item">VA-DOM Grid</span>
+        <span class="footer__pipe">|</span>
+        <span class="footer__meta-item">PJM API</span>
+        <span class="footer__pipe">|</span>
+        <span class="footer__meta-item"><a href="contact.html" style="color:var(--color-brand-green);text-decoration:none;">Contact Arnav</a></span>
+      </div>
+
+      <div class="footer__divider" aria-hidden="true"></div>
+
+      <p class="footer__copyright">CarbonSense® Virginia Grid Carbon API</p>
+    </div>
+  </footer>
+
+  <script>
+    // Nav scroll effect
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 20) {
+        nav.style.borderColor = 'var(--color-brand-green)';
+        nav.style.background = 'rgba(4, 5, 6, 0.95)';
+      } else {
+        nav.style.borderColor = 'var(--color-slate)';
+        nav.style.background = 'rgba(4, 5, 6, 0.7)';
+      }
+    }, { passive: true });
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        if (href === '#') return;
+        const target = document.querySelector(href);
+        if (target) {
+          e.preventDefault();
+          const navHeight = 56;
+          const targetPosition = target.getBoundingClientRect().top + window.scrollY - navHeight;
+          window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+        }
+      });
+    });
+
+    // Animated stat counters
+    function animateStat(element) {
+      const target = parseInt(element.getAttribute('data-target'));
+      const duration = 1500;
+      const startTime = performance.now();
+
+      function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        const current = Math.floor(easeOut * target);
+        element.textContent = current;
+        if (progress < 1) {
+          requestAnimationFrame(update);
+        }
+      }
+      requestAnimationFrame(update);
+    }
+
+    const statObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateStat(entry.target);
+          statObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.stat-card__value').forEach(el => statObserver.observe(el));
+
+    // ============ GAME LOGIC ============
+    let totalEmissions = 0;
+    const meterFill = document.getElementById('meter-fill');
+    const meterValue = document.getElementById('meter-value');
+    const resultTotal = document.getElementById('result-total');
+    const resultNote = document.getElementById('result-note');
+    const gameResult = document.getElementById('game-result');
+    const charAvatar = document.getElementById('char-avatar');
+    const charName = document.getElementById('char-name');
+    const charStatus = document.getElementById('char-status');
+
+    const taskEmissions = {
+      concise: 5,
+      reasoning: 250,
+      image: 1500,
+      video: 5000,
+      train: 50000,
+      'train-large': 500000
+    };
+
+    const taskNames = {
+      concise: 'Concise text answer',
+      reasoning: 'Reasoning model',
+      image: 'Image generation',
+      video: 'Video generation',
+      train: 'Fine-tune small LLM',
+      'train-large': 'Train foundation model'
+    };
+
+    function addTask(taskKey, displayName, co2) {
+      totalEmissions += co2;
+
+      // Update meter (cap at 500,000 for visual scaling)
+      const pct = Math.min((totalEmissions / 500000) * 100, 100);
+      meterFill.style.width = pct + '%';
+      meterValue.textContent = totalEmissions.toLocaleString() + ' g CO₂';
+
+      // Update result
+      gameResult.classList.add('show');
+      resultTotal.textContent = totalEmissions.toLocaleString();
+
+      // Character feedback
+      if (totalEmissions < 1000) {
+        charName.textContent = 'Dev';
+        charStatus.textContent = 'Light usage — keep it efficient';
+        charAvatar.textContent = '👨‍💻';
+        charAvatar.classList.remove('character-avatar--hot');
+      } else if (totalEmissions < 50000) {
+        charName.textContent = 'Power User';
+        charStatus.textContent = 'Moderate footprint — consider concise prompts';
+        charAvatar.textContent = '🧑‍💻';
+        charAvatar.classList.remove('character-avatar--hot');
+      } else if (totalEmissions < 500000) {
+        charName.textContent = 'AI Heavy';
+        charStatus.textContent = 'High emissions — switch to smaller models';
+        charAvatar.textContent = '🔥';
+        charAvatar.classList.add('character-avatar--hot');
+      } else {
+        charName.textContent = 'Carbon Bomb';
+        charStatus.textContent = 'Critical — train less, query efficiently';
+        charAvatar.textContent = '💀';
+        charAvatar.classList.add('character-avatar--hot');
+      }
+
+      // Contextual note
+      if (totalEmissions < 1000) {
+        resultNote.textContent = 'Equivalent to ~' + Math.round(totalEmissions / 5) + ' smartphone charges. Well within reason.';
+      } else if (totalEmissions < 50000) {
+        resultNote.textContent = 'Equivalent to driving ~' + Math.round(totalEmissions / 404) + ' miles in an average car. Consider smaller models.';
+      } else if (totalEmissions < 500000) {
+        resultNote.textContent = 'Equivalent to ~' + Math.round(totalEmissions / 1000) + ' kg CO₂ — like training a small model. Time to optimize.';
+      } else {
+        resultNote.textContent = 'Equivalent to ~' + Math.round(totalEmissions / 1000) + ' kg CO₂ — comparable to training a foundation model for a day.';
+      }
+    }
+
+    function resetGame() {
+      totalEmissions = 0;
+      meterFill.style.width = '0%';
+      meterValue.textContent = '0 g CO₂';
+      gameResult.classList.remove('show');
+      charName.textContent = 'Dev';
+      charStatus.textContent = 'Idle';
+      charAvatar.textContent = '👨‍💻';
+      charAvatar.classList.remove('character-avatar--hot');
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Tab') document.body.classList.add('keyboard-nav');
+    });
+    document.addEventListener('mousedown', () => document.body.classList.remove('keyboard-nav'));
+  </script>
+</body>
+</html>

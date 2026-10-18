@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CarbonSense — Contact Arnav Shukla">
+  <title>Contact — CarbonSense</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-phosphor-green: #3ecf8e;
+      --color-gold-accent: #d4af37;
+      --color-moss: #2d5a27;
+      --color-canopy: #0b2a17;
+      --color-leaf-light: #8fbc8f;
+      --color-mint-pulse: #00c573;
+      --color-forest-depth: #1f4b37;
+      --color-midnight-emerald: #006239;
+      --color-snow: #fafafa;
+      --color-silver-mist: #b4b4b4;
+      --color-smoke: #898989;
+      --color-graphite: #4d4d4d;
+      --color-slate: #393939;
+      --color-charcoal: #2e2e2e;
+      --color-ash: #242424;
+      --color-obsidian: #0a0f0c;
+
+      --font-circular: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-source-code-pro: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+      --text-caption: 12px;
+      --leading-caption: 1.5;
+      --tracking-caption: -0.084px;
+      --text-body-sm: 14px;
+      --leading-body-sm: 1.43;
+      --tracking-body-sm: -0.098px;
+      --text-body: 16px;
+      --leading-body: 1.5;
+      --tracking-body: -0.112px;
+      --text-subheading: 18px;
+      --leading-subheading: 1.38;
+      --tracking-subheading: -0.126px;
+      --text-heading-sm: 24px;
+      --leading-heading-sm: 1.33;
+      --tracking-heading-sm: -0.168px;
+      --text-heading: 36px;
+      --leading-heading: 1.2;
+      --tracking-heading: -0.252px;
+
+      --font-weight-regular: 400;
+      --font-weight-medium: 500;
+      --font-weight-bold: 700;
+
+      --spacing-8: 8px;
+      --spacing-16: 16px;
+      --spacing-24: 24px;
+      --spacing-32: 32px;
+      --spacing-40: 40px;
+      --spacing-48: 48px;
+      --spacing-64: 64px;
+      --spacing-80: 80px;
+      --spacing-96: 96px;
+      --spacing-112: 112px;
+      --spacing-128: 128px;
+
+      --page-max-width: 1200px;
+      --radius-lg: 8px;
+      --radius-2xl: 16px;
+      --radius-full: 9999px;
+
+      --surface-obsidian-canvas: #0a0f0c;
+      --surface-ash-card: #242424;
+      --surface-charcoal-border: #2e2e2e;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-circular);
+      font-size: var(--text-body);
+      line-height: var(--leading-body);
+      letter-spacing: var(--tracking-body);
+      font-weight: var(--font-weight-regular);
+      color: var(--color-snow);
+      background:
+        radial-gradient(circle at 10% 20%, rgba(31, 75, 55, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(212, 175, 55, 0.08) 0%, transparent 40%),
+        var(--color-obsidian);
+      background-attachment: fixed;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      width: 100%;
+      max-width: var(--page-max-width);
+      margin: 0 auto;
+      padding: 0 var(--spacing-32);
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .animate-fade-in { animation: fadeInUp 0.7s ease-out forwards; }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+
+    .cursor {
+      display: inline-block;
+      width: 8px;
+      height: 1em;
+      background: var(--color-phosphor-green);
+      animation: blink 1s infinite;
+      vertical-align: text-bottom;
+    }
+
+    /* NAVIGATION */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      height: 64px;
+      background: rgba(10, 15, 12, 0.8);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--color-charcoal);
+    }
+
+    .nav__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+      max-width: var(--page-max-width);
+      margin: 0 auto;
+      padding: 0 var(--spacing-32);
+    }
+
+    .nav__logo {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-8);
+      font-family: var(--font-circular);
+      font-size: var(--text-body);
+      font-weight: var(--font-weight-medium);
+      letter-spacing: var(--tracking-body);
+      color: var(--color-snow);
+    }
+
+    .nav__logo-mark {
+      width: 28px;
+      height: 28px;
+      background: var(--color-phosphor-green);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav__logo-mark svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--color-obsidian);
+    }
+
+    .nav__links {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-32);
+    }
+
+    .nav__link {
+      font-family: var(--font-circular);
+      font-size: var(--text-body-sm);
+      font-weight: var(--font-weight-regular);
+      letter-spacing: var(--tracking-body-sm);
+      color: var(--color-silver-mist);
+      transition: color 0.2s ease;
+    }
+
+    .nav__link:hover {
+      color: var(--color-phosphor-green);
+    }
+
+    .nav__actions {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-16);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-8);
+      font-family: var(--font-circular);
+      font-size: var(--text-body-sm);
+      font-weight: var(--font-weight-medium);
+      letter-spacing: var(--tracking-body-sm);
+      border-radius: var(--radius-full);
+      padding: var(--spacing-10) var(--spacing-20);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .btn--primary {
+      background: var(--color-phosphor-green);
+      color: var(--color-obsidian);
+      border-color: var(--color-phosphor-green);
+    }
+
+    .btn--primary:hover {
+      background: var(--color-mint-pulse);
+      border-color: var(--color-mint-pulse);
+      transform: translateY(-2px);
+    }
+
+    .btn--ghost {
+      background: transparent;
+      color: var(--color-snow);
+      border-color: var(--color-slate);
+    }
+
+    .btn--ghost:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: var(--color-graphite);
+      transform: translateY(-2px);
+    }
+
+    /* HERO */
+    .hero {
+      padding: var(--spacing-96) var(--spacing-32) var(--spacing-64);
+      text-align: center;
+    }
+
+    .hero__tagline {
+      font-family: var(--font-circular);
+      font-size: var(--text-body-sm);
+      font-weight: var(--font-weight-medium);
+      letter-spacing: var(--tracking-body-sm);
+      color: var(--color-gold-accent);
+      text-transform: uppercase;
+      margin-bottom: var(--spacing-16);
+      animation: fadeInUp 0.6s ease-out forwards;
+    }
+
+    .hero__title {
+      font-family: var(--font-circular);
+      font-size: var(--text-display);
+      font-weight: var(--font-weight-bold);
+      line-height: 1;
+      letter-spacing: var(--tracking-display);
+      color: var(--color-snow);
+      margin-bottom: var(--spacing-16);
+      animation: fadeInUp 0.7s ease-out forwards;
+    }
+
+    .hero__title .highlight { color: var(--color-phosphor-green); }
+
+    .hero__subtitle {
+      font-family: var(--font-circular);
+      font-size: var(--text-body);
+      font-weight: var(--font-weight-regular);
+      line-height: var(--leading-body);
+      letter-spacing: var(--tracking-body);
+      color: var(--color-silver-mist);
+      max-width: 560px;
+      margin: 0 auto;
+      animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    /* CONTACT CARD */
+    .contact-card {
+      background: var(--color-obsidian);
+      border: 1px solid var(--color-charcoal);
+      border-radius: var(--radius-2xl);
+      padding: var(--spacing-48);
+      max-width: 560px;
+      margin: 0 auto var(--spacing-64);
+      animation: fadeInUp 0.6s ease-out forwards;
+    }
+
+    .contact-card__label {
+      font-family: var(--font-circular);
+      font-size: var(--text-body-sm);
+      font-weight: var(--font-weight-medium);
+      letter-spacing: var(--tracking-body-sm);
+      color: var(--color-phosphor-green);
+      text-transform: uppercase;
+      margin-bottom: var(--spacing-16);
+    }
+
+    .contact-card__title {
+      font-family: var(--font-circular);
+      font-size: var(--text-heading-sm);
+      font-weight: var(--font-weight-medium);
+      line-height: var(--leading-heading-sm);
+      letter-spacing: var(--tracking-heading-sm);
+      color: var(--color-snow);
+      margin-bottom: var(--spacing-32);
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-16);
+      padding: var(--spacing-16) 0;
+      border-bottom: 1px solid var(--color-charcoal);
+      transition: all 0.2s ease;
+    }
+
+    .contact-item:last-child { border-bottom: none; }
+
+    .contact-item:hover {
+      background: rgba(255, 255, 255, 0.02);
+      padding-left: var(--spacing-8);
+    }
+
+    .contact-item__icon {
+      width: 40px;
+      height: 40px;
+      background: var(--color-ash);
+      border: 1px solid var(--color-phosphor-green);
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-phosphor-green);
+      flex-shrink: 0;
+    }
+
+    .contact-item__content h3 {
+      font-family: var(--font-circular);
+      font-size: var(--text-body-sm);
+      font-weight: var(--font-weight-medium);
+      letter-spacing: var(--tracking-body-sm);
+      color: var(--color-snow);
+      margin-bottom: var(--spacing-4);
+    }
+
+    .contact-item__content p {
+      font-family: var(--font-circular);
+      font-size: var(--text-body-sm);
+      font-weight: var(--font-weight-regular);
+      letter-spacing: var(--tracking-body-sm);
+      color: var(--color-silver-mist);
+    }
+
+    .contact-item__link {
+      color: var(--color-phosphor-green);
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 4px;
+      transition: color 0.2s ease;
+    }
+
+    .contact-item__link:hover {
+      color: var(--color-mint-pulse);
+    }
+
+    /* CONTACT FORM */
+    .contact-form-card {
+      background: var(--color-obsidian);
+      border: 1px solid var(--color-charcoal);
+      border-radius: var(--radius-2xl);
+      padding: var(--spacing-48);
+      max-width: 560px;
+      margin: 0 auto;
+      animation: fadeInUp 0.6s ease-out forwards;
+    }
+
+    .contact-form-card__label {
+      font-family: var(--font-circular);
+      font-size: var(--text-body-sm);
+      font-weight: var(--font-weight-medium);
+      letter-spacing: var(--tracking-body-sm);
+      color: var(--color-gold-accent);
+      text-transform: uppercase;
+      margin-bottom: var(--spacing-16);
+    }
+
+    .contact-form-card__title {
+      font-family: var(--font-circular);
+      font-size: var(--text-heading-sm);
+      font-weight: var(--font-weight-medium);
+      line-height: var(--leading-heading-sm);
+      letter-spacing: var(--tracking-heading-sm);
+      color: var(--color-snow);
+      margin-bottom: var(--spacing-32);
+    }
+
+    .form-field {
+      margin-bottom: var(--spacing-20);
+    }
+
+    .form-field__label {
+      font-family: var(--font-circular);
+      font-size: var(--text-body-sm);
+      font-weight: var(--font-weight-medium);
+      letter-spacing: var(--tracking-body-sm);
+      color: var(--color-silver-mist);
+      margin-bottom: var(--spacing-8);
+      display: block;
+    }
+
+    .form-field__input,
+    .form-field__textarea {
+      width: 100%;
+      background: #050a07;
+      border: 1px solid var(--color-charcoal);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-12) var(--spacing-16);
+      font-family: var(--font-circular);
+      font-size: var(--text-body-sm);
+      color: var(--color-snow);
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .form-field__input::placeholder,
+    .form-field__textarea::placeholder {
+      color: var(--color-smoke);
+    }
+
+    .form-field__input:focus,
+    .form-field__textarea:focus {
+      border-color: var(--color-phosphor-green);
+      box-shadow: 0 0 0 3px rgba(62, 207, 142, 0.15);
+    }
+
+    .form-field__textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .btn--submit {
+      width: 100;
+      background: var(--color-phosphor-green);
+      color: var(--color-obsidian);
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn--submit:hover {
+      background: var(--color-mint-pulse);
+      transform: translateY(-2px);
+    }
+
+    .form-success {
+      background: rgba(62, 207, 142, 0.1);
+      border: 1px solid var(--color-phosphor-green);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-16);
+      margin-top: var(--spacing-20);
+      display: none;
+      animation: fadeInUp 0.4s ease-out forwards;
+    }
+
+    .form-success__icon {
+      color: var(--color-phosphor-green);
+      margin-right: var(--spacing-8);
+    }
+
+    .form-success__text {
+      font-family: var(--font-circular);
+      font-size: var(--text-body-sm);
+      color: var(--color-snow);
+    }
+
+    /* FOOTER */
+    .footer {
+      background: var(--color-obsidian);
+      border-top: 1px solid var(--color-charcoal);
+      padding: var(--spacing-64) var(--spacing-32);
+    }
+
+    .footer__inner {
+      max-width: var(--page-max-width);
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .footer__text {
+      font-family: var(--font-circular);
+      font-size: var(--text-caption);
+      font-weight: var(--font-weight-regular);
+      letter-spacing: var(--tracking-caption);
+      color: var(--color-smoke);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      :root { --text-display: 48px; }
+      .contact-card, .contact-form-card { padding: var(--spacing-32); }
+    }
+  </style>
+</head>
+<body class="animate-fade-in">
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav__inner">
+      <a href="index.html" class="nav__logo" aria-label="CarbonSense home">
+        <span class="nav__logo-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </span>
+        CarbonSense
+      </a>
+
+      <div class="nav__links">
+        <a href="index.html" class="nav__link">Home</a>
+        <a href="docs.html" class="nav__link">API Docs</a>
+        <a href="impact.html" class="nav__link">AI Impact</a>
+        <a href="contact.html" class="nav__link nav__link--active">Contact</a>
+      </div>
+
+      <div class="nav__actions">
+        <a href="index.html" class="btn btn--ghost">Back to Home</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero" aria-labelledby="contact-title">
+      <div class="container">
+        <p class="hero__tagline delay-1">Get In Touch</p>
+        <h1 id="contact-title" class="hero__title delay-2">
+          Contact <span class="highlight">Arnav</span>
+        </h1>
+        <p class="hero__subtitle delay-3">
+          Questions about CarbonSense? Want to collaborate on the eco-suite?
+          Reach out directly.
+        </p>
+      </div>
+    </section>
+
+    <section class="section" style="padding: var(--spacing-96) var(--spacing-32);">
+      <div class="container">
+        <div style="max-width: 560px; margin: 0 auto;">
+          <div class="contact-card">
+            <p class="contact-card__label">Reach Arnav Directly</p>
+            <h2 class="contact-card__title">Contact Information</h2>
+
+            <div class="contact-item delay-1">
+              <div class="contact-item__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                </div>
+                <div class="contact-item__content">
+                  <h3>Email</h3>
+                  <p>arnav.shukla2607@gmail.com</p>
+                </div>
+              </div>
+              <a href="mailto:arnav.shukla2607@gmail.com" class="contact-item__link">Email Arnav</a>
+            </div>
+
+            <div class="contact-item delay-2">
+              <div class="contact-item__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 5H11a2 2 0 0 1 2 2v11l-4 6-2.59-2.58L5 19z"/><polyline points="22 12 15 12 15 15"/></svg>
+                </div>
+                <div class="contact-item__content">
+                  <h3>Phone</h3>
+                  <p>804616259</p>
+                </div>
+              </div>
+              <a href="tel:804616259" class="contact-item__link">Call Arnav</a>
+            </div>
+
+            <div class="contact-item delay-3">
+              <div class="contact-item__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 13V6H2v13H3.5c.78 0 1.5-.3 2.08-.86l5.43-4.43c.49-.4 1.17-.59 1.9-.59s1.41.2 1.9.59l5.43 4.43c.58.36 1.3.86 2.08.86H22c1.1 0 2-.9 2-2v-1c0-1.1-.9-2-2-2z"/></svg>
+                </div>
+                <div class="contact-item__content">
+                  <h3>GitHub</h3>
+                  <p>@arnav-shukla</p>
+                </div>
+              </div>
+              <a href="https://github.com" class="contact-item__link" target="_blank" rel="noopener">View GitHub</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding: var(--spacing-96) var(--spacing-32);">
+      <div class="container">
+        <div style="max-width: 560px; margin: 0 auto;">
+          <div class="contact-form-card">
+            <p class="contact-form-card__label">Send a Message</p>
+            <h2 class="contact-form-card__title">Say Hello</h2>
+
+            <form id="contactForm" novalidate>
+              <div class="form-field">
+                <label class="form-field__label" for="name">Name</label>
+                <input type="text" class="form-field__input" id="name" placeholder="Your name" required>
+              </div>
+              <div class="form-field">
+                <label class="form-field__label" for="email">Email</label>
+                <input type="email" class="form-field__input" id="email" placeholder="you@example.com" required>
+              </div>
+              <div class="form-field">
+                <label class="form-field__label" for="subject">Subject</label>
+                <input type="text" class="form-field__input" id="subject" placeholder="What's this about?" required>
+              </div>
+              <div class="form-field">
+                <label class="form-field__label" for="message">Message</label>
+                <textarea class="form-field__textarea" id="message" placeholder="Tell us about your project..." required></textarea>
+              </div>
+              <button type="submit" class="btn btn--submit btn--primary">Send Message</button>
+            </form>
+
+            <div class="form-success" id="formSuccess">
+              <span class="form-success__icon" aria-hidden="true">✓</span>
+              <span class="form-success__text">Message sent successfully! We'll get back to you soon.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <div class="footer__inner">
+      <p class="footer__text">MIT Licensed — Built for 804 Hacks 2026</p>
+    </div>
+  </footer>
+
+  <script>
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        if (href === '#') return;
+        const target = document.querySelector(href);
+        if (target) {
+          e.preventDefault();
+          const navHeight = 64;
+          const targetPosition = target.getBoundingClientRect().top + window.scrollY - navHeight;
+          window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+        }
+      });
+    });
+
+    // Contact form
+    const form = document.getElementById('contactForm');
+    const success = document.getElementById('formSuccess');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      form.style.display = 'none';
+      success.style.display = 'block';
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Tab') document.body.classList.add('keyboard-nav');
+    });
+    document.addEventListener('mousedown', () => document.body.classList.remove('keyboard-nav'));
+  </script>
+</body>
+</html>

@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CarbonSense API Documentation — Virginia Grid Carbon Intelligence">
+  <title>CarbonSense API Docs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-void-black: #040506;
+      --color-ink: #07080a;
+      --color-obsidian: #111214;
+      --color-graphite: #1b1c1e;
+      --color-smoke: #6a6b6c;
+      --color-ash: #9c9c9d;
+      --color-mist: #e6e6e6;
+      --color-iron: #454647;
+      --color-slate: #2f3031;
+      --color-pure-white: #ffffff;
+      --color-brand-green: #00c573;
+      --color-brand-green-dim: rgba(0, 197, 115, 0.15);
+
+      --font-inter: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-geistmono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+      --text-eyebrow: 11px;
+      --leading-eyebrow: 0.91;
+      --tracking-eyebrow: 0.8px;
+      --text-body: 16px;
+      --leading-body: 1.15;
+      --tracking-body: 0px;
+      --text-body-lg: 18px;
+      --leading-body-lg: 1.15;
+      --tracking-body-lg: 0px;
+      --text-subheading: 20px;
+      --leading-subheading: 1.2;
+      --tracking-subheading: 0.2px;
+      --text-heading-sm: 24px;
+      --leading-heading-sm: 1.15;
+      --tracking-heading-sm: 0px;
+      --text-heading: 32px;
+      --leading-heading: 1.15;
+      --tracking-heading: 0px;
+      --text-heading-lg: 56px;
+      --leading-heading-lg: 1.17;
+      --tracking-heading-lg: 0.22px;
+      --text-display: 64px;
+      --leading-display: 1.1;
+      --tracking-display: 0px;
+
+      --font-weight-light: 300;
+      --font-weight-regular: 400;
+      --font-weight-medium: 500;
+      --font-weight-semibold: 600;
+      --font-weight-bold: 700;
+
+      --spacing-8: 8px;
+      --spacing-16: 16px;
+      --spacing-24: 24px;
+      --spacing-32: 32px;
+      --spacing-40: 40px;
+      --spacing-48: 48px;
+      --spacing-64: 64px;
+      --spacing-80: 80px;
+      --spacing-96: 96px;
+      --spacing-120: 120px;
+
+      --page-max-width: 1200px;
+      --section-gap: 80px;
+      --card-padding: 24px;
+      --element-gap: 8px;
+
+      --radius-lg: 8px;
+      --radius-2xl: 16px;
+      --radius-full: 9999px;
+      --radius-iconcontainers: 99999px;
+
+      --shadow-key: rgba(255, 255, 255, 0.05) 0px 1px 0px 0px inset,
+                    rgba(255, 255, 255, 0.25) 0px 0px 0px 1px,
+                    rgba(0, 0, 0, 0.2) 0px -1px 0px 0px inset;
+      --shadow-key-hover: rgba(255, 255, 255, 0.08) 0px 1px 0px 0px inset,
+                          rgba(0, 197, 115, 0.25) 0px 0px 0px 1px,
+                          rgba(0, 0, 0, 0.25) 0px -1px 0px 0px inset;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-inter);
+      font-size: var(--text-body);
+      line-height: var(--leading-body);
+      letter-spacing: var(--tracking-body);
+      font-weight: var(--font-weight-regular);
+      color: var(--color-pure-white);
+      background: var(--color-void-black);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      width: 100%;
+      max-width: var(--page-max-width);
+      margin: 0 auto;
+      padding: 0 var(--spacing-32);
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .animate-fade-in { animation: fadeInUp 0.7s ease-out forwards; }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+
+    .cursor {
+      display: inline-block;
+      width: 8px;
+      height: 1em;
+      background: var(--color-brand-green);
+      animation: blink 1s infinite;
+      vertical-align: text-bottom;
+    }
+
+    /* Glass Nav */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      height: 56px;
+      background: rgba(4, 5, 6, 0.7);
+      backdrop-filter: blur(48px);
+      border: 1px solid var(--color-slate);
+      border-radius: var(--radius-full);
+      margin: var(--spacing-16);
+      padding: 0 var(--spacing-20);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .nav__logo {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-8);
+      font-family: var(--font-inter);
+      font-size: 13px;
+      font-weight: var(--font-weight-medium);
+      letter-spacing: var(--tracking-body);
+      color: var(--color-pure-white);
+    }
+
+    .nav__logo-mark {
+      width: 20px;
+      height: 20px;
+      background: var(--color-brand-green);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav__logo-mark svg {
+      width: 12px;
+      height: 12px;
+      stroke: var(--color-void-black);
+    }
+
+    .nav__links {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-24);
+    }
+
+    .nav__link {
+      font-family: var(--font-inter);
+      font-size: 13px;
+      font-weight: var(--font-weight-medium);
+      letter-spacing: 0px;
+      color: var(--color-ash);
+      transition: color 0.2s ease;
+    }
+
+    .nav__link:hover {
+      color: var(--color-brand-green);
+    }
+
+    .nav__link--active {
+      color: var(--color-brand-green);
+    }
+
+    .nav__actions {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-12);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-8);
+      font-family: var(--font-inter);
+      font-size: 13px;
+      font-weight: var(--font-weight-medium);
+      letter-spacing: 0px;
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-8) var(--spacing-16);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .btn--filled {
+      background: var(--color-mist);
+      color: var(--color-iron);
+    }
+
+    .btn--filled:hover {
+      background: var(--color-ash);
+      transform: translateY(-1px);
+    }
+
+    .btn--ghost {
+      background: transparent;
+      color: var(--color-pure-white);
+      border-color: transparent;
+    }
+
+    .btn--ghost:hover {
+      color: var(--color-brand-green);
+    }
+
+    .btn--brand {
+      background: var(--color-brand-green);
+      color: var(--color-void-black);
+      border-color: var(--color-brand-green);
+    }
+
+    .btn--brand:hover {
+      background: var(--color-success-green);
+      transform: translateY(-1px);
+    }
+
+    /* Hero */
+    .hero {
+      padding: var(--spacing-96) var(--spacing-32) var(--spacing-64);
+      text-align: center;
+    }
+
+    .hero__tagline {
+      font-family: var(--font-geistmono);
+      font-size: var(--text-eyebrow);
+      font-weight: var(--font-weight-medium);
+      letter-spacing: var(--tracking-eyebrow);
+      color: var(--color-brand-green);
+      text-transform: uppercase;
+      margin-bottom: var(--spacing-16);
+      animation: fadeInUp 0.6s ease-out forwards;
+    }
+
+    .hero__title {
+      font-family: var(--font-inter);
+      font-size: var(--text-heading-lg);
+      font-weight: var(--font-weight-regular);
+      line-height: var(--leading-heading-lg);
+      letter-spacing: var(--tracking-heading-lg);
+      color: var(--color-pure-white);
+      margin-bottom: var(--spacing-16);
+      animation: fadeInUp 0.7s ease-out forwards;
+    }
+
+    .hero__title .highlight { color: var(--color-brand-green); }
+
+    .hero__subtitle {
+      font-family: var(--font-inter);
+      font-size: var(--text-body-lg);
+      font-weight: var(--font-weight-regular);
+      line-height: var(--leading-body-lg);
+      letter-spacing: var(--tracking-body-lg);
+      color: var(--color-ash);
+      max-width: 560px;
+      margin: 0 auto var(--spacing-32);
+      animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    /* Docs Layout */
+    .docs-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: var(--spacing-64);
+      padding: var(--spacing-64) var(--spacing-32);
+      min-height: calc(100vh - 56px);
+    }
+
+    .docs-sidebar {
+      position: sticky;
+      top: 56px;
+      height: fit-content;
+    }
+
+    .docs-nav {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-4);
+    }
+
+    .docs-nav__group {
+      margin-bottom: var(--spacing-32);
+    }
+
+    .docs-nav__group-label {
+      font-family: var(--font-geistmono);
+      font-size: var(--text-eyebrow);
+      font-weight: var(--font-weight-medium);
+      letter-spacing: var(--tracking-eyebrow);
+      color: var(--color-smoke);
+      text-transform: uppercase;
+      margin-bottom: var(--spacing-12);
+    }
+
+    .docs-nav__item {
+      display: block;
+      padding: var(--spacing-10) var(--spacing-16);
+      border: 1px solid transparent;
+      border-radius: var(--radius-lg);
+      font-family: var(--font-inter);
+      font-size: var(--text-body-sm);
+      font-weight: var(--font-weight-regular);
+      letter-spacing: var(--tracking-body-sm);
+      color: var(--color-silver-mist);
+      transition: all 0.2s ease;
+    }
+
+    .docs-nav__item:hover {
+      background: var(--color-ink);
+      border-color: var(--color-slate);
+      color: var(--color-pure-white);
+    }
+
+    .docs-nav__item--active {
+      background: var(--color-brand-green-dim);
+      border-color: var(--color-brand-green);
+      color: var(--color-brand-green);
+    }
+
+    .docs-content {
+      max-width: 800px;
+    }
+
+    .docs-section {
+      margin-bottom: var(--spacing-96);
+      animation: fadeInUp 0.6s ease-out forwards;
+    }
+
+    .docs-section:last-child { margin-bottom: var(--spacing-64); }
+
+    .docs-section__label {
+      font-family: var(--font-geistmono);
+      font-size: var(--text-eyebrow);
+      font-weight: var(--font-weight-medium);
+      letter-spacing: var(--tracking-eyebrow);
+      color: var(--color-brand-green);
+      text-transform: uppercase;
+      margin-bottom: var(--spacing-12);
+    }
+
+    .docs-section__title {
+      font-family: var(--font-inter);
+      font-size: var(--text-heading-sm);
+      font-weight: var(--font-weight-medium);
+      line-height: var(--leading-heading-sm);
+      letter-spacing: var(--tracking-heading-sm);
+      color: var(--color-pure-white);
+      margin-bottom: var(--spacing-24);
+    }
+
+    .docs-section__desc {
+      font-family: var(--font-inter);
+      font-size: var(--text-body);
+      font-weight: var(--font-weight-regular);
+      line-height: var(--leading-body);
+      letter-spacing: var(--tracking-body);
+      color: var(--color-smoke);
+      margin-bottom: var(--spacing-24);
+    }
+
+    /* Endpoint Card */
+    .endpoint {
+      background: transparent;
+      border: 1px solid var(--color-slate);
+      border-radius: var(--radius-2xl);
+      padding: var(--spacing-32);
+      margin-bottom: var(--spacing-32);
+      box-shadow: var(--shadow-key);
+      transition: all 0.2s ease;
+    }
+
+    .endpoint:hover {
+      border-color: var(--color-brand-green);
+      box-shadow: var(--shadow-key-hover);
+    }
+
+    .endpoint__header {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-16);
+      margin-bottom: var(--spacing-16);
+      flex-wrap: wrap;
+    }
+
+    .endpoint__method {
+      font-family: var(--font-geistmono);
+      font-size: var(--text-eyebrow);
+      font-weight: var(--font-weight-medium);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: var(--spacing-6) var(--spacing-14);
+      border-radius: var(--radius-full);
+      border: 1px solid;
+    }
+
+    .endpoint__method--get {
+      color: var(--color-brand-green);
+      border-color: var(--color-brand-green);
+      background: var(--color-brand-green-dim);
+    }
+
+    .endpoint__method--post {
+      color: var(--color-pure-white);
+      border-color: var(--color-slate);
+      background: transparent;
+    }
+
+    .endpoint__path {
+      font-family: var(--font-geistmono);
+      font-size: var(--text-body-sm);
+      letter-spacing: 0.1em;
+      color: var(--color-pure-white);
+      margin-left: auto;
+    }
+
+    .endpoint__desc {
+      font-family: var(--font-inter);
+      font-size: var(--text-body-sm);
+      font-weight: var(--font-weight-regular);
+      line-height: var(--leading-body-sm);
+      letter-spacing: var(--tracking-body-sm);
+      color: var(--color-smoke);
+      margin-bottom: var(--spacing-20);
+    }
+
+    .endpoint__row {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: var(--spacing-16);
+      margin-bottom: var(--spacing-12);
+      font-family: var(--font-geistmono);
+      font-size: 13px;
+      line-height: 1.5;
+      letter-spacing: 0.1em;
+    }
+
+    .endpoint__row--label { color: var(--color-smoke); }
+    .endpoint__row--value { color: var(--color-ash); }
+
+    .endpoint__example {
+      background: var(--color-obsidian);
+      border: 1px solid var(--color-slate);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-20);
+      margin-top: var(--spacing-20);
+      overflow-x: auto;
+    }
+
+    .endpoint__example-title {
+      font-family: var(--font-geistmono);
+      font-size: var(--text-eyebrow);
+      font-weight: var(--font-weight-medium);
+      letter-spacing: var(--tracking-eyebrow);
+      color: var(--color-smoke);
+      text-transform: uppercase;
+      margin-bottom: var(--spacing-12);
+    }
+
+    .endpoint__example pre {
+      font-family: var(--font-geistmono);
+      font-size: 13px;
+      line-height: 1.6;
+      letter-spacing: 0.1em;
+      color: var(--color-ash);
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin: 0;
+    }
+
+    .endpoint__example code { color: var(--color-brand-green); }
+
+    .endpoint__example .key { color: var(--color-ash); }
+    .endpoint__example .str { color: var(--color-brand-green); }
+    .endpoint__example .num { color: var(--color-success-green); }
+    .endpoint__example .bool { color: var(--color-brand-green); }
+
+    /* Base URL */
+    .base-url {
+      background: var(--color-ink);
+      border: 1px solid var(--color-slate);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-20) var(--spacing-24);
+      margin-bottom: var(--spacing-40);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-16);
+    }
+
+    .base-url__label {
+      font-family: var(--font-geistmono);
+      font-size: var(--text-eyebrow);
+      font-weight: var(--font-weight-medium);
+      letter-spacing: var(--tracking-eyebrow);
+      color: var(--color-smoke);
+      text-transform: uppercase;
+    }
+
+    .base-url__value {
+      font-family: var(--font-geistmono);
+      font-size: var(--text-body-sm);
+      letter-spacing: 0.1em;
+      color: var(--color-brand-green);
+      font-weight: var(--font-weight-medium);
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--color-void-black);
+      border-top: 1px solid var(--color-slate);
+      padding: var(--spacing-64) var(--spacing-32);
+    }
+
+    .footer__inner {
+      max-width: var(--page-max-width);
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .footer__text {
+      font-family: var(--font-inter);
+      font-size: var(--text-eyebrow);
+      font-weight: var(--font-weight-regular);
+      letter-spacing: var(--tracking-eyebrow);
+      color: var(--color-smoke);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .docs-layout { grid-template-columns: 1fr; gap: var(--spacing-32); }
+      .docs-sidebar { position: static; top: auto; }
+      .docs-nav { flex-direction: row; overflow-x: auto; padding-bottom: var(--spacing-16); gap: var(--spacing-12); }
+      .docs-nav__group { margin-bottom: 0; }
+      .docs-nav__group-label { display: none; }
+    }
+
+    @media (max-width: 768px) {
+      :root { --text-heading-lg: 40px; }
+      .endpoint__row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body class="animate-fade-in">
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav__inner">
+      <a href="index.html" class="nav__logo" aria-label="CarbonSense home">
+        <span class="nav__logo-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </span>
+        CarbonSense
+      </a>
+
+      <div class="nav__links">
+        <a href="index.html" class="nav__link">Home</a>
+        <a href="docs.html" class="nav__link nav__link--active">API Docs</a>
+        <a href="impact.html" class="nav__link">AI Impact</a>
+        <a href="contact.html" class="nav__link">Contact</a>
+      </div>
+
+      <div class="nav__actions">
+        <a href="index.html" class="btn btn--ghost">Back to Home</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero" aria-labelledby="docs-title">
+      <div class="container">
+        <p class="hero__tagline delay-1">Technical Reference</p>
+        <h1 id="docs-title" class="hero__title delay-2">
+          API <span class="highlight">Reference</span>
+        </h1>
+        <p class="hero__subtitle delay-3">
+          REST endpoints for Virginia grid carbon intensity, code energy estimation, and emission analysis.
+          Base URL: <code style="color: var(--color-brand-green);">http://localhost:8000/api/v1</code>
+        </p>
+      </div>
+    </section>
+
+    <div class="docs-layout">
+      <aside class="docs-sidebar" aria-label="Documentation navigation">
+        <div class="docs-nav">
+          <div class="docs-nav__group">
+            <div class="docs-nav__group-label">Endpoints</div>
+            <a href="#carbon-intensity" class="docs-nav__item docs-nav__item--active">GET /carbon/intensity</a>
+            <a href="#carbon-history" class="docs-nav__item">GET /carbon/intensity/history</a>
+            <a href="#carbon-forecast" class="docs-nav__item">GET /carbon/forecast</a>
+            <a href="#carbon-hourly" class="docs-nav__item">GET /carbon/hourly</a>
+            <a href="#generation-mix" class="docs-nav__item">GET /carbon/generation-mix</a>
+            <a href="#code-analyze" class="docs-nav__item">POST /code/analyze</a>
+            <a href="#carbon-compare" class="docs-nav__item">GET /carbon/compare</a>
+            <a href="#grid-status" class="docs-nav__item">GET /grid/status</a>
+            <a href="#carbon-equivalents" class="docs-nav__item">GET /carbon/equivalents</a>
+          </div>
+        </div>
+      </aside>
+
+      <div class="docs-content">
+        <!-- Carbon Intensity -->
+        <section id="carbon-intensity" class="docs-section">
+          <div class="docs-section__label">Carbon Intensity</div>
+          <h2 class="docs-section__title">GET /carbon/intensity</h2>
+          <p class="docs-section__desc">Get current Virginia (DOM zone) carbon intensity in lb CO₂/MWh and g CO₂/kWh.</p>
+
+          <div class="endpoint">
+            <header class="endpoint__header">
+              <span class="endpoint__method endpoint__method--get">GET</span>
+              <code class="endpoint__path">/carbon/intensity</code>
+            </header>
+            <p class="endpoint__desc">Returns the latest real-time carbon intensity for the Virginia Dominion zone.</p>
+
+            <div class="endpoint__row">
+              <span class="endpoint__row--label">Query</span>
+              <span class="endpoint__row--value"><code>real_time</code> (boolean, default: true)</span>
+            </div>
+
+            <div class="endpoint__example">
+              <p class="endpoint__example-title">Response</p>
+              <pre><code>{
+  <span class="key">"timestamp"</span>: <span class="str">"2026-10-18T14:21:57.690923Z"</span>,
+  <span class="key">"carbon_intensity_lb_per_mwh"</span>: <span class="num">761.5</span>,
+  <span class="key">"carbon_intensity_g_per_kwh"</span>: <span class="num">345.4</span>,
+  <span class="key">"region"</span>: <span class="str">"VA-DOM"</span>,
+  <span class="key">"source"</span>: <span class="str">"fallback_estimate"</span>,
+  <span class="key">"is_real_time"</span>: <span class="bool">false</span>
+}</code></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- History -->
+        <section id="carbon-history" class="docs-section">
+          <div class="docs-section__label">Historical Data</div>
+          <h2 class="docs-section__title">GET /carbon/intensity/history</h2>
+          <p class="docs-section__desc">Retrieve historical carbon intensity at 5-minute intervals.</p>
+
+          <div class="endpoint">
+            <header class="endpoint__header">
+              <span class="endpoint__method endpoint__method--get">GET</span>
+              <code class="endpoint__path">/carbon/intensity/history</code>
+            </header>
+
+            <div class="endpoint__row">
+              <span class="endpoint__row--label">Query</span>
+              <span class="endpoint__row--value"><code>hours</code> (integer, 1–168, default: 24)</span>
+            </div>
+
+            <div class="endpoint__example">
+              <p class="endpoint__example-title">Example</p>
+              <pre><code>GET /carbon/intensity/history?hours=24</code></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- Forecast -->
+        <section id="carbon-forecast" class="docs-section">
+          <div class="docs-section__label">Forecast</div>
+          <h2 class="docs-section__title">GET /carbon/forecast</h2>
+          <p class="docs-section__desc">Get carbon intensity forecast for the next 24–72 hours.</p>
+
+          <div class="endpoint">
+            <header class="endpoint__header">
+              <span class="endpoint__method endpoint__method--get">GET</span>
+              <code class="endpoint__path">/carbon/forecast</code>
+            </header>
+
+            <div class="endpoint__row">
+              <span class="endpoint__row--label">Query</span>
+              <span class="endpoint__row--value"><code>hours</code> (integer, 1–72, default: 24)</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Hourly Intensity -->
+        <section id="carbon-hourly" class="docs-section">
+          <div class="docs-section__label">Hourly Intensity</div>
+          <h2 class="docs-section__title">GET /carbon/hourly</h2>
+          <p class="docs-section__desc">24-hour carbon intensity from 1 AM through 12 AM, with scheduling summary for carbon-aware job planning.</p>
+
+          <div class="endpoint">
+            <header class="endpoint__header">
+              <span class="endpoint__method endpoint__method--get">GET</span>
+              <code class="endpoint__path">/carbon/hourly</code>
+            </header>
+            <p class="endpoint__desc">Returns hourly gCO₂/kWh values for all 24 hours plus best-window and dirtiest-hour summary stats.</p>
+
+            <div class="endpoint__example">
+              <p class="endpoint__example-title">Response</p>
+              <pre><code>{
+  <span class="key">"region"</span>: <span class="str">"VA-DOM"</span>,
+  <span class="key">"current_hour"</span>: {
+    <span class="key">"hour"</span>: <span class="num">5</span>,
+    <span class="key">"label"</span>: <span class="str">"5 AM"</span>,
+    <span class="key">"carbon_intensity_g_per_kwh"</span>: <span class="num">301.0</span>
+  },
+  <span class="key">"summary"</span>: {
+    <span class="key">"now_g_per_kwh"</span>: <span class="num">301.0</span>,
+    <span class="key">"best_window_start"</span>: <span class="num">5</span>,
+    <span class="key">"best_window_end"</span>: <span class="num">11</span>,
+    <span class="key">"best_window_avg_g_per_kwh"</span>: <span class="num">292.0</span>,
+    <span class="key">"cleaner_by_percent"</span>: <span class="num">3.0</span>,
+    <span class="key">"dirtiest_hour"</span>: <span class="num">18</span>,
+    <span class="key">"dirtiest_hour_g_per_kwh"</span>: <span class="num">361.0</span>,
+    <span class="key">"data_points"</span>: <span class="num">24</span>
+  },
+  <span class="key">"hours"</span>: [
+    {
+      <span class="key">"hour"</span>: <span class="num">1</span>,
+      <span class="key">"label"</span>: <span class="str">"1 AM"</span>,
+      <span class="key">"carbon_intensity_g_per_kwh"</span>: <span class="num">280.5</span>
+    },
+    {
+      <span class="key">"hour"</span>: <span class="num">2</span>,
+      <span class="key">"label"</span>: <span class="str">"2 AM"</span>,
+      <span class="key">"carbon_intensity_g_per_kwh"</span>: <span class="num">275.0</span>
+    }
+    <span class="key">...22 more hours</span>
+  ]
+}</code></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- Generation Mix -->
+        <section id="generation-mix" class="docs-section">
+          <div class="docs-section__label">Generation Mix</div>
+          <h2 class="docs-section__title">GET /carbon/generation-mix</h2>
+          <p class="docs-section__desc">Get current Virginia grid fuel mix percentages from EIA.</p>
+
+          <div class="endpoint">
+            <header class="endpoint__header">
+              <span class="endpoint__method endpoint__method--get">GET</span>
+              <code class="endpoint__path">/carbon/generation-mix</code>
+            </header>
+
+            <div class="endpoint__example">
+              <p class="endpoint__example-title">Response</p>
+              <pre><code>{
+  <span class="key">"natural_gas"</span>: <span class="num">42.0</span>,
+  <span class="key">"nuclear"</span>: <span class="num">33.0</span>,
+  <span class="key">"coal"</span>: <span class="num">12.0</span>,
+  <span class="key">"solar"</span>: <span class="num">6.0</span>,
+  <span class="key">"wind"</span>: <span class="num">3.0</span>,
+  <span class="key">"hydro"</span>: <span class="num">2.0</span>,
+  <span class="key">"other"</span>: <span class="num">2.0</span>
+}</code></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- Code Analyze -->
+        <section id="code-analyze" class="docs-section">
+          <div class="docs-section__label">Code Analysis</div>
+          <h2 class="docs-section__title">POST /code/analyze</h2>
+          <p class="docs-section__desc">Estimate energy consumption and CO₂ emissions for a code snippet across 11 languages.</p>
+
+          <div class="endpoint">
+            <header class="endpoint__header">
+              <span class="endpoint__method endpoint__method--post">POST</span>
+              <code class="endpoint__path">/code/analyze</code>
+            </header>
+
+            <div class="endpoint__example">
+              <p class="endpoint__example-title">Request Body</p>
+              <pre><code>{
+  <span class="key">"code"</span>: <span class="str">"def fib(n): return n if n&lt;=1 else fib(n-1)+fib(n-2)"</span>,
+  <span class="key">"language"</span>: <span class="str">"python"</span>,
+  <span class="key">"runtime_seconds"</span>: <span class="num">5</span>,
+  <span class="key">"cpu_utilization"</span>: <span class="num">0.5</span>,
+  <span class="key">"memory_mb"</span>: <span class="num">256</span>
+}</code></pre>
+            </div>
+
+            <div class="endpoint__example">
+              <p class="endpoint__example-title">Response</p>
+              <pre><code>{
+  <span class="key">"estimated_energy_kwh"</span>: <span class="num">1e-6</span>,
+  <span class="key">"estimated_emissions_g_co2"</span>: <span class="num">0.0004</span>,
+  <span class="key">"carbon_intensity_used_g_per_kwh"</span>: <span class="num">345.4</span>,
+  <span class="key">"breakdown"</span>: {
+    <span class="key">"cpu_wh"</span>: <span class="num">0.001</span>,
+    <span class="key">"memory_wh"</span>: <span class="num">0.0</span>,
+    <span class="key">"idle_wh"</span>: <span class="num">0.0</span>,
+    <span class="key">"total_wh"</span>: <span class="num">0.001</span>,
+    <span class="key">"language"</span>: <span class="str">"python"</span>
+  },
+  <span class="key">"timestamp"</span>: <span class="str">"2026-10-18T14:21:45.896309Z"</span>
+}</code></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- Compare -->
+        <section id="carbon-compare" class="docs-section">
+          <div class="docs-section__label">Comparison</div>
+          <h2 class="docs-section__title">GET /carbon/compare</h2>
+          <p class="docs-section__desc">Compare current intensity against historical percentiles.</p>
+
+          <div class="endpoint">
+            <header class="endpoint__header">
+              <span class="endpoint__method endpoint__method--get">GET</span>
+              <code class="endpoint__path">/carbon/compare</code>
+            </header>
+
+            <div class="endpoint__row">
+              <span class="endpoint__row--label">Query</span>
+              <span class="endpoint__row--value"><code>days</code> (integer, 1–365, default: 30)</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Grid Status -->
+        <section id="grid-status" class="docs-section">
+          <div class="docs-section__label">Grid Status</div>
+          <h2 class="docs-section__title">GET /grid/status</h2>
+          <p class="docs-section__desc">Complete grid snapshot: current intensity, forecast, and generation mix.</p>
+
+          <div class="endpoint">
+            <header class="endpoint__header">
+              <span class="endpoint__method endpoint__method--get">GET</span>
+              <code class="endpoint__path">/grid/status</code>
+            </header>
+          </div>
+        </section>
+
+        <!-- Equivalents -->
+        <section id="carbon-equivalents" class="docs-section">
+          <div class="docs-section__label">Equivalents</div>
+          <h2 class="docs-section__title">GET /carbon/equivalents</h2>
+          <p class="docs-section__desc">Translate grams of CO₂ into relatable equivalents.</p>
+
+          <div class="endpoint">
+            <header class="endpoint__header">
+              <span class="endpoint__method endpoint__method--get">GET</span>
+              <code class="endpoint__path">/carbon/equivalents</code>
+            </header>
+
+            <div class="endpoint__row">
+              <span class="endpoint__row--label">Query</span>
+              <span class="endpoint__row--value"><code>grams_co2</code> (float, default: 1000)</span>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <div class="footer__inner">
+      <p class="footer__text">MIT Licensed — Built for 804 Hacks 2026</p>
+    </div>
+  </footer>
+
+  <script>
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        const target = document.querySelector(href);
+        if (target) {
+          e.preventDefault();
+          const navHeight = 56;
+          const targetPosition = target.getBoundingClientRect().top + window.scrollY - navHeight;
+          window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>

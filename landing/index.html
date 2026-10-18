@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CarbonSense — Real-time Virginia grid carbon intensity API + code energy estimation">
+  <title>CarbonSense</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Colors — Raycast dark cockpit, green instead of coral */
+      --color-void-black: #040506;
+      --color-ink: #07080a;
+      --color-obsidian: #111214;
+      --color-graphite: #1b1c1e;
+      --color-smoke: #6a6b6c;
+      --color-ash: #9c9c9d;
+      --color-mist: #e6e6e6;
+      --color-iron: #454647;
+      --color-slate: #2f3031;
+      --color-pure-white: #ffffff;
+      --color-brand-green: #00c573;
+      --color-brand-green-dim: rgba(0, 197, 115, 0.15);
+      --color-ember-hush: #2a1a1c;
+      --color-electric-sky: #63a1ff;
+      --color-cobalt-edge: #143ca3;
+      --color-deep-space: #02193b;
+      --color-info-blue: #56c2ff;
+      --color-success-green: #59d499;
+
+      /* Typography */
+      --font-inter: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-geistmono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+      /* Type scale */
+      --text-eyebrow: 11px;
+      --leading-eyebrow: 0.91;
+      --tracking-eyebrow: 0.8px;
+      --text-body: 16px;
+      --leading-body: 1.15;
+      --tracking-body: 0px;
+      --text-body-lg: 18px;
+      --leading-body-lg: 1.15;
+      --tracking-body-lg: 0px;
+      --text-subheading: 20px;
+      --leading-subheading: 1.2;
+      --tracking-subheading: 0.2px;
+      --text-heading-sm: 24px;
+      --leading-heading-sm: 1.15;
+      --tracking-heading-sm: 0px;
+      --text-heading: 32px;
+      --leading-heading: 1.15;
+      --tracking-heading: 0px;
+      --text-heading-lg: 56px;
+      --leading-heading-lg: 1.17;
+      --tracking-heading-lg: 0.22px;
+      --text-display: 64px;
+      --leading-display: 1.1;
+      --tracking-display: 0px;
+
+      --font-weight-light: 300;
+      --font-weight-regular: 400;
+      --font-weight-medium: 500;
+      --font-weight-semibold: 600;
+      --font-weight-bold: 700;
+
+      /* Spacing */
+      --spacing-8: 8px;
+      --spacing-16: 16px;
+      --spacing-24: 24px;
+      --spacing-32: 32px;
+      --spacing-40: 40px;
+      --spacing-48: 48px;
+      --spacing-56: 56px;
+      --spacing-64: 64px;
+      --spacing-80: 80px;
+      --spacing-96: 96px;
+      --spacing-120: 120px;
+      --spacing-224: 224px;
+
+      /* Layout */
+      --page-max-width: 1200px;
+      --section-gap: 80px;
+      --card-padding: 24px;
+      --element-gap: 8px;
+
+      /* Radius */
+      --radius-lg: 8px;
+      --radius-2xl: 16px;
+      --radius-full: 9999px;
+      --radius-iconcontainers: 99999px;
+
+      /* Shadows — keyboard key stack */
+      --shadow-key: rgba(255, 255, 255, 0.05) 0px 1px 0px 0px inset,
+                    rgba(255, 255, 255, 0.25) 0px 0px 0px 1px,
+                    rgba(0, 0, 0, 0.2) 0px -1px 0px 0px inset;
+      --shadow-key-hover: rgba(255, 255, 255, 0.08) 0px 1px 0px 0px inset,
+                          rgba(0, 197, 115, 0.25) 0px 0px 0px 1px,
+                          rgba(0, 0, 0, 0.25) 0px -1px 0px 0px inset;
+      --shadow-glass: rgba(0, 0, 0, 0.4) 0px 4px 40px 8px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-inter);
+      font-size: var(--text-body);
+      line-height: var(--leading-body);
+      letter-spacing: var(--tracking-body);
+      font-weight: var(--font-weight-regular);
+      color: var(--color-pure-white);
+      background: var(--color-void-black);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      width: 100%;
+      max-width: var(--page-max-width);
+      margin: 0 auto;
+      padding: 0 var(--spacing-32);
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse-green {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(0, 197, 115, 0.4); }
+      50% { box-shadow: 0 0 0 12px rgba(0, 197, 115, 0); }
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .animate-fade-in { animation: fadeInUp 0.7s ease-out forwards; }
+    .animate-pulse { animation: pulse-green 3s infinite; }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+
+    .cursor {
+      display: inline-block;
+      width: 8px;
+      height: 1em;
+      background: var(--color-brand-green);
+      animation: blink 1s infinite;
+      vertical-align: text-bottom;
+    }
+
+    /* Glass Navigation Bar */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      height: 56px;
+      background: rgba(4, 5, 6, 0.7);
+      backdrop-filter: blur(48px);
+      border: 1px solid var(--color-slate);
+      border-radius: var(--radius-full);
+      margin: var(--spacing-16);
+      padding: 0 var(--spacing-20);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .nav__logo {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-8);
+      font-family: var(--font-inter);
+      font-size: 13px;
+      font-weight: var(--font-weight-medium);
+      letter-spacing: var(--tracking-body);
+      color: var(--color-pure-white);
+    }
+
+    .nav__logo-mark {
+      width: 20px;
+      height: 20px;
+      background: var(--color-brand-green);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav__logo-mark svg {
+      width: 12px;
+      height: 12px;
+      stroke: var(--color-void-black);
+    }
+
+    .nav__links {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-24);
+    }
+
+    .nav__link {
+      font-family: var(--font-inter);
+      font-size: 13px;
+      font-weight: var(--font-weight-medium);
+      letter-spacing: 0px;
+      color: var(--color-ash);
+      transition: color 0.2s ease;
+    }
+
+    .nav__link:hover {
+      color: var(--color-brand-green);
+    }
+
+    .nav__actions {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-12);
+    }
+
+    /* Buttons — Neutral filled (Mist) per Raycast spec */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-8);
+      font-family: var(--font-inter);
+      font-size: 13px;
+      font-weight: var(--font-weight-medium);
+      letter-spacing: 0px;
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-8) var(--spacing-16);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .btn:focus-visible {
+      outline: none;
+    }
+
+    .btn--filled {
+      background: var(--color-mist);
+      color: var(--color-iron);
+    }
+
+    .btn--filled:hover {
+      background: var(--color-ash);
+      transform: translateY(-1px);
+    }
+
+    .btn--ghost {
+      background: transparent;
+      color: var(--color-pure-white);
+      border-color: transparent;
+    }
+
+    .btn--ghost:hover {
+      color: var(--color-brand-green);
+    }
+
+    .btn--brand {
+      background: var(--color-brand-green);
+      color: var(--color-void-black);
+      border-color: var(--color-brand-green);
+    }
+
+    .btn--brand:hover {
+      background: var(--color-success-green);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px -2px rgba(0, 197, 115, 0.3);
+    }
+
+    /* Hero — full viewport, atmospheric */
+    .hero {
+      position: relative;
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: var(--spacing-120) var(--spacing-32) var(--spacing-96);
+      overflow: hidden;
+    }
+
+    .hero__atmos {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(0, 197, 115, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(99, 161, 255, 0.08) 0%, transparent 40%);
+      pointer-events: none;
+    }
+
+    .hero__content {
+      position: relative;
+      z-index: 1;
+      max-width: 600px;
+    }
+
+    .hero__eyebrow {
+      font-family: var(--font-geistmono);
+      font-size: var(--text-eyebrow);
+      font-weight: var(--font-weight-medium);
+      letter-spacing: var(--tracking-eyebrow);
+      color: var(--color-brand-green);
+      text-transform: uppercase;
+      margin-bottom: var(--spacing-16);
+      animation: fadeInUp 0.6s ease-out forwards;
+    }
+
+    .hero__title {
+      font-family: var(--font-inter);
+      font-size: var(--text-heading-lg);
+      font-weight: var(--font-weight-regular);
+      line-height: var(--leading-heading-lg);
+      letter-spacing: var(--tracking-heading-lg);
+      color: var(--color-pure-white);
+      margin-bottom: var(--spacing-24);
+      animation: fadeInUp 0.7s ease-out forwards;
+    }
+
+    .hero__title .highlight {
+      color: var(--color-brand-green);
+    }
+
+    .hero__subtitle {
+      font-family: var(--font-inter);
+      font-size: var(--text-body-lg);
+      font-weight: var(--font-weight-regular);
+      line-height: var(--leading-body-lg);
+      letter-spacing: var(--tracking-body-lg);
+      color: var(--color-ash);
+      max-width: 480px;
+      margin: 0 auto var(--spacing-32);
+      animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    .hero__actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-12);
+      flex-wrap: wrap;
+      animation: fadeInUp 0.9s ease-out forwards;
+    }
+
+    /* Side-by-side section helper */
+    .side-by-side {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-48);
+      align-items: start;
+    }
+
+    @media (max-width: 900px) {
+      .side-by-side { grid-template-columns: 1fr; gap: var(--spacing-32); }
+    }
+
+    /* Section header */
+    .section__header {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-12);
+      margin-bottom: var(--spacing-40);
+    }
+
+    .section__eyebrow {
+      font-family: var(--font-geistmono);
+      font-size: var(--text-eyebrow);
+      font-weight: var(--font-weight-medium);
+      letter-spacing: var(--tracking-eyebrow);
+      color: var(--color-brand-green);
+      text-transform: uppercase;
+    }
+
+    .section__title {
+      font-family: var(--font-inter);
+      font-size: var(--text-heading);
+      font-weight: var(--font-weight-medium);
+      line-height: var(--leading-heading);
+      letter-spacing: var(--tracking-heading);
+      color: var(--color-pure-white);
+    }
+
+    .section__desc {
+      font-family: var(--font-inter);
+      font-size: var(--text-body-lg);
+      font-weight: var(--font-weight-regular);
+      line-height: var(--leading-body-lg);
+      letter-spacing: var(--tracking-body-lg);
+      color: var(--color-smoke);
+      max-width: 480px;
+    }
+
+    /* Cards — keyboard key treatment */
+    .card-key {
+      background: transparent;
+      border: 1px solid var(--color-slate);
+      border-radius: var(--radius-2xl);
+      padding: var(--card-padding);
+      box-shadow: var(--shadow-key);
+      transition: all 0.2s ease;
+    }
+
+    .card-key:hover {
+      border-color: var(--color-brand-green);
+      box-shadow: var(--shadow-key-hover);
+      transform: translateY(-2px);
+    }
+
+    /* Stat cards — side by side */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--spacing-16);
+      margin-bottom: var(--spacing-40);
+    }
+
+    @media (max-width: 900px) {
+      .stat-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .stat-card {
+      background: transparent;
+      border: 1px solid var(--color-slate);
+      border-radius: var(--radius-2xl);
+      padding: var(--spacing-24);
+      box-shadow: var(--shadow-key);
+      transition: all 0.2s ease;
+    }
+
+    .stat-card:hover {
+      border-color: var(--color-brand-green);
+      box-shadow: var(--shadow-key-hover);
+    }
+
+    .stat-card__label {
+      font-family: var(--font-geistmono);
+      font-size: 10px;
+      font-weight: var(--font-weight-medium);
+      letter-spacing: 0.05em;
+      color: var(--color-smoke);
+      text-transform: uppercase;
+      margin-bottom: var(--spacing-8);
+    }
+
+    .stat-card__value {
+      font-family: 'SF Pro Text', var(--font-inter);
+      font-size: 32px;
+      font-weight: var(--font-weight-medium);
+      line-height: 1.15;
+      color: var(--color-pure-white);
+      display: block;
+      margin-bottom: var(--spacing-4);
+    }
+
+    .stat-card__sub {
+      font-family: var(--font-inter);
+      font-size: 13px;
+      font-weight: var(--font-weight-regular);
+      color: var(--color-ash);
+    }
+
+    /* Calculator — interactive */
+    .calculator-wrap {
+      background: var(--color-ink);
+      border: 1px solid var(--color-slate);
+      border-radius: var(--radius-2xl);
+      padding: var(--spacing-40);
+      box-shadow: var(--shadow-key);
+    }
+
+    .calculator-header {
+      margin-bottom: var(--spacing-32);
+    }
+
+    .calc-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-24);
+      margin-bottom: var(--spacing-24);
+    }
+
+    @media (max-width: 640px) {
+      .calc-row { grid-template-columns: 1fr; }
+    }
+
+    .calc-field {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-8);
+    }
+
+    .calc-field__label {
+      font-family: var(--font-geistmono);
+      font-size: 10px;
+      font-weight: var(--font-weight-medium);
+      letter-spacing: 0.05em;
+      color: var(--color-smoke);
+      text-transform: uppercase;
+    }
+
+    .calc-range {
+      width: 100%;
+      height: 4px;
+      background: var(--color-graphite);
+      border-radius: var(--radius-full);
+      appearance: none;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .calc-range::-webkit-slider-thumb {
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      background: var(--color-brand-green);
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid var(--color-pure-white);
+      box-shadow: 0 2px 6px -1px rgba(0, 197, 115, 0.4);
+    }
+
+    .calc-range::-webkit-slider-thumb:hover {
+      background: var(--color-success-green);
+    }
+
+    .calc-range__value {
+      font-family: var(--font-geistmono);
+      font-size: 13px;
+      font-weight: var(--font-weight-medium);
+      color: var(--color-brand-green);
+      text-align: right;
+    }
+
+    .calc-result {
+      background: var(--color-obsidian);
+      border: 1px solid var(--color-brand-green);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-24);
+      margin-top: var(--spacing-8);
+      animation: fadeInUp 0.5s ease-out forwards;
+    }
+
+    .calc-result__label {
+      font-family: var(--font-geistmono);
+      font-size: 10px;
+      font-weight: var(--font-weight-medium);
+      letter-spacing: 0.05em;
+      color: var(--color-brand-green);
+      text-transform: uppercase;
+      margin-bottom: var(--spacing-8);
+      display: block;
+    }
+
+    .calc-result__value {
+      font-family: 'SF Pro Text', var(--font-inter);
+      font-size: 48px;
+      font-weight: var(--font-weight-medium);
+      line-height: 1;
+      color: var(--color-pure-white);
+      letter-spacing: -0.02em;
+    }
+
+    .calc-result__unit {
+      font-family: var(--font-inter);
+      font-size: var(--text-body-sm);
+      color: var(--color-ash);
+      margin-left: var(--spacing-8);
+      vertical-align: baseline;
+    }
+
+    /* Badge */
+    .badge {
+      font-family: var(--font-inter);
+      font-size: 11px;
+      font-weight: var(--font-weight-medium);
+      letter-spacing: 0px;
+      color: var(--color-pure-white);
+      background: var(--color-graphite);
+      border-radius: var(--radius-badges);
+      padding: 0 var(--spacing-8);
+      height: 20px;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .badge--green {
+      background: var(--color-brand-green-dim);
+      color: var(--color-brand-green);
+      border: 1px solid rgba(0, 197, 115, 0.3);
+    }
+
+    /* Terminal */
+    .terminal-wrap {
+      background: var(--color-void-black);
+      border: 1px solid var(--color-slate);
+      border-radius: var(--radius-2xl);
+      padding: var(--spacing-32);
+      box-shadow: var(--shadow-key);
+      font-family: var(--font-geistmono);
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--color-ash);
+    }
+
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-8);
+      margin-bottom: var(--spacing-16);
+      padding-bottom: var(--spacing-12);
+      border-bottom: 1px solid var(--color-slate);
+    }
+
+    .terminal-dots {
+      display: flex;
+      gap: var(--spacing-6);
+    }
+
+    .terminal-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .terminal-dot--red { background: var(--color-graphite); }
+    .terminal-dot--yellow { background: var(--color-graphite); }
+    .terminal-dot--green { background: var(--color-brand-green); }
+
+    .terminal-title {
+      font-family: var(--font-inter);
+      font-size: 12px;
+      font-weight: var(--font-weight-medium);
+      letter-spacing: 0px;
+      color: var(--color-ash);
+      margin-left: auto;
+    }
+
+    .terminal-line {
+      margin: var(--spacing-6) 0;
+      white-space: pre-wrap;
+    }
+
+    .terminal-line--prompt { color: var(--color-brand-green); }
+    .terminal-line--cmd { color: var(--color-pure-white); }
+    .terminal-line--out { color: var(--color-smoke); }
+    .terminal-line--hi { color: var(--color-brand-green); font-weight: var(--font-weight-medium); }
+
+    /* Footer */
+    .footer {
+      border-top: 1px solid var(--color-slate);
+      padding: var(--spacing-64) var(--spacing-32);
+    }
+
+    .footer__inner {
+      max-width: var(--page-max-width);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--spacing-24);
+      text-align: center;
+    }
+
+    .footer__brand {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--spacing-8);
+    }
+
+    .footer__logo {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-8);
+      font-family: var(--font-inter);
+      font-size: var(--text-body);
+      font-weight: var(--font-weight-medium);
+      letter-spacing: var(--tracking-body);
+      color: var(--color-pure-white);
+    }
+
+    .footer__meta {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-16);
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .footer__meta-item {
+      font-family: var(--font-geistmono);
+      font-size: 12px;
+      font-weight: var(--font-weight-medium);
+      letter-spacing: 0.017em;
+      color: var(--color-smoke);
+    }
+
+    .footer__pipe {
+      color: var(--color-graphite);
+    }
+
+    .footer__divider {
+      width: 100%;
+      height: 1px;
+      background: var(--color-slate);
+      margin: var(--spacing-16) 0;
+    }
+
+    .footer__copyright {
+      font-family: var(--font-inter);
+      font-size: var(--text-eyebrow);
+      font-weight: var(--font-weight-regular);
+      letter-spacing: var(--tracking-eyebrow);
+      color: var(--color-smoke);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      :root {
+        --text-heading-lg: 40px;
+        --text-heading: 28px;
+      }
+      .nav { margin: var(--spacing-12); }
+      .hero { padding: var(--spacing-80) var(--spacing-24) var(--spacing-64); }
+      .stat-grid { grid-template-columns: 1fr; }
+      .calc-row { grid-template-columns: 1fr; }
+      .side-by-side { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body class="animate-fade-in">
+
+  <!-- Glass Nav -->
+  <nav class="nav" id="nav">
+    <div class="nav__inner">
+      <a href="#" class="nav__logo" aria-label="CarbonSense home">
+        <span class="nav__logo-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </span>
+        CarbonSense
+      </a>
+      <div class="nav__links">
+        <a href="index.html" class="nav__link">Home</a>
+        <a href="docs.html" class="nav__link">API Docs</a>
+        <a href="impact.html" class="nav__link">AI Impact</a>
+        <a href="contact.html" class="nav__link">Contact</a>
+      </div>
+      <div class="nav__actions">
+        <a href="#calculator" class="btn btn--ghost">Try Calculator</a>
+        <a href="#" class="btn btn--filled">View on GitHub</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero__atmos" aria-hidden="true"></div>
+      <div class="container">
+        <div class="hero__content">
+          <p class="hero__eyebrow delay-1">Virginia Grid Carbon Intelligence</p>
+          <h1 class="hero__title delay-2">
+            CarbonSense<span class="highlight"> API</span>
+          </h1>
+          <p class="hero__subtitle delay-3">
+            Real-time Virginia grid carbon intensity + code energy estimation across 11 languages.
+            Built for developers who measure what matters.
+          </p>
+          <div class="hero__actions delay-4">
+            <a href="#calculator" class="btn btn--brand">Try Live Calculator</a>
+            <a href="docs.html" class="btn btn--ghost">Read API Docs</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Live Stats — side by side -->
+    <section class="section" style="padding: var(--spacing-96) var(--spacing-32);">
+      <div class="container">
+        <div class="stat-grid">
+          <div class="stat-card animate-fade-in delay-1">
+            <span class="stat-card__label">Grid intensity</span>
+            <span class="stat-card__value" id="stat-intensity" data-target="345">0</span>
+            <span class="stat-card__sub">g CO₂/kWh · VA-DOM</span>
+          </div>
+          <div class="stat-card animate-fade-in delay-2">
+            <span class="stat-card__label">Languages</span>
+            <span class="stat-card__value" id="stat-languages" data-target="11">0</span>
+            <span class="stat-card__sub">supported</span>
+          </div>
+          <div class="stat-card animate-fade-in delay-3">
+            <span class="stat-card__label">Energy saved</span>
+            <span class="stat-card__value" id="stat-savings" data-target="47">0</span>
+            <span class="stat-card__sub">% per optimized run</span>
+          </div>
+          <div class="stat-card animate-fade-in delay-4">
+            <span class="stat-card__label">Uptime</span>
+            <span class="stat-card__value" id="stat-uptime" data-target="99.9">0</span>
+            <span class="stat-card__sub">% API availability</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features — side by side -->
+    <section id="features" class="section" style="padding: var(--spacing-96) var(--spacing-32);">
+      <div class="container">
+        <div class="section__header">
+          <p class="section__eyebrow">Capabilities</p>
+          <h2 class="section__title">Built for carbon-aware development</h2>
+          <p class="section__desc">Real-time grid data, code energy estimation, and historical comparisons — all side by side in one dashboard.</p>
+        </div>
+
+        <div class="side-by-side">
+          <div class="card-key animate-fade-in delay-1">
+            <div style="display:flex;align-items:center;gap:var(--spacing-12);margin-bottom:var(--spacing-16);">
+              <div style="width:36px;height:36px;background:var(--color-obsidian);border:1px solid var(--color-slate);border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--color-brand-green);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="4" y="8" width="40" height="32" rx="2"/>
+                  <path d="M8 24L16 16L24 20L36 8" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="12" cy="12" r="2" fill="currentColor"/>
+                </svg>
+              </div>
+              <span class="badge badge--green">Live</span>
+            </div>
+            <h3 class="section__title" style="font-size:var(--text-subheading);margin-bottom:var(--spacing-12);">Live Grid Intensity</h3>
+            <p style="font-family:var(--font-inter);font-size:var(--text-body-sm);color:var(--color-smoke);line-height:1.6;">
+              Real-time carbon intensity (g CO₂/kWh) from PJM DOM zone. Historical 5-min intervals, 24–72hr forecasts, generation mix breakdown.
+            </p>
+          </div>
+
+          <div class="card-key animate-fade-in delay-2">
+            <div style="display:flex;align-items:center;gap:var(--spacing-12);margin-bottom:var(--spacing-16);">
+              <div style="width:36px;height:36px;background:var(--color-obsidian);border:1px solid var(--color-slate);border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--color-brand-green);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="4" y="4" width="40" height="16" rx="2"/>
+                  <path d="M4 28h40M4 36h30M4 44h20" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <span class="badge badge--green">11 langs</span>
+            </div>
+            <h3 class="section__title" style="font-size:var(--text-subheading);margin-bottom:var(--spacing-12);">Code Energy Estimation</h3>
+            <p style="font-family:var(--font-inter);font-size:var(--text-body-sm);color:var(--color-smoke);line-height:1.6;">
+              Analyze source code across 11 languages. Estimate CPU energy, memory usage, and CO₂ emissions using real-time Virginia grid intensity.
+            </p>
+          </div>
+
+          <div class="card-key animate-fade-in delay-3">
+            <div style="display:flex;align-items:center;gap:var(--spacing-12);margin-bottom:var(--spacing-16);">
+              <div style="width:36px;height:36px;background:var(--color-obsidian);border:1px solid var(--color-slate);border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--color-brand-green);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="24" cy="24" r="18"/>
+                  <path d="M24 14v10l7 7" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M16 24h16M24 16v16" stroke-linecap="round" opacity="0.4"/>
+                </svg>
+              </div>
+              <span class="badge badge--green">Historical</span>
+            </div>
+            <h3 class="section__title" style="font-size:var(--text-subheading);margin-bottom:var(--spacing-12);">Historical Comparisons</h3>
+            <p style="font-family:var(--font-inter);font-size:var(--text-body-sm);color:var(--color-smoke);line-height:1.6;">
+              Percentile ranking vs 30/90/365-day baselines. Daily averages, time series, and emission equivalents.
+            </p>
+          </div>
+
+          <div class="card-key animate-fade-in delay-4">
+            <div style="display:flex;align-items:center;gap:var(--spacing-12);margin-bottom:var(--spacing-16);">
+              <div style="width:36px;height:36px;background:var(--color-obsidian);border:1px solid var(--color-slate);border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--color-brand-green);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 24L18 12L30 24L42 12" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M18 36L30 24" stroke-linecap="round"/>
+                  <circle cx="18" cy="12" r="3" fill="currentColor"/>
+                  <circle cx="30" cy="24" r="3" fill="currentColor"/>
+                  <circle cx="42" cy="12" r="3" fill="currentColor"/>
+                </svg>
+              </div>
+              <span class="badge badge--green">Equivalents</span>
+            </div>
+            <h3 class="section__title" style="font-size:var(--text-subheading);margin-bottom:var(--spacing-12);">Emission Equivalents</h3>
+            <p style="font-family:var(--font-inter);font-size:var(--text-body-sm);color:var(--color-smoke);line-height:1.6;">
+              Translate grams of CO₂ into relatable metrics — miles driven, phone charges, LED bulb hours, tree days to sequester.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Calculator — side by side -->
+    <section id="calculator" class="section" style="padding: var(--spacing-96) var(--spacing-32);">
+      <div class="container">
+        <div class="side-by-side">
+          <div class="calculator-wrap animate-fade-in delay-1">
+            <div class="calculator-header">
+              <p class="section__eyebrow">Carbon Calculator</p>
+              <h2 class="section__title" style="font-size:var(--text-heading-sm);margin-bottom:var(--spacing-16);">Estimate your code's footprint</h2>
+            </div>
+
+            <form class="calc-form" id="calcForm">
+              <div class="calc-row">
+                <div class="calc-field">
+                  <label class="calc-field__label">Runtime (seconds)</label>
+                  <input type="range" class="calc-range" id="range-runtime" min="1" max="300" value="5">
+                  <span class="calc-range__value" id="val-runtime">5s</span>
+                </div>
+                <div class="calc-field">
+                  <label class="calc-field__label">CPU Utilization</label>
+                  <input type="range" class="calc-range" id="range-cpu" min="0" max="100" value="50">
+                  <span class="calc-range__value" id="val-cpu">50%</span>
+                </div>
+              </div>
+
+              <div class="calc-row">
+                <div class="calc-field">
+                  <label class="calc-field__label">Memory (MB)</label>
+                  <input type="range" class="calc-range" id="range-memory" min="64" max="4096" value="256">
+                  <span class="calc-range__value" id="val-memory">256 MB</span>
+                </div>
+                <div class="calc-field">
+                  <label class="calc-field__label">Language</label>
+                  <select id="select-language" style="
+                    background: var(--color-obsidian);
+                    border: 1px solid var(--color-slate);
+                    border-radius: var(--radius-lg);
+                    color: var(--color-pure-white);
+                    padding: var(--spacing-10) var(--spacing-12);
+                    font-family: var(--font-inter);
+                    font-size: 13px;
+                    cursor: pointer;
+                    outline: none;
+                    width: 100%;
+                    color: var(--color-pure-white);
+                  ">
+                    <option value="python" data-factor="1.0">Python</option>
+                    <option value="javascript" data-factor="0.8">JavaScript</option>
+                    <option value="go" data-factor="0.5">Go</option>
+                    <option value="rust" data-factor="0.4">Rust</option>
+                    <option value="cpp" data-factor="0.4">C++</option>
+                    <option value="java" data-factor="0.7">Java</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="calc-result">
+                <span class="calc-result__label">Estimated CO₂ Emissions</span>
+                <span class="calc-result__value" id="result-emissions">0.0000</span><span class="calc-result__unit">g CO₂</span>
+              </div>
+            </form>
+          </div>
+
+          <div class="card-key animate-fade-in delay-2" style="padding: var(--spacing-40);">
+            <p class="section__eyebrow">How it works</p>
+            <h2 class="section__title" style="font-size:var(--text-heading-sm);margin-bottom:var(--spacing-24);">Measurement model</h2>
+            <div style="display:flex;flex-direction:column;gap:var(--spacing-20);">
+              <div style="display:flex;align-items:flex-start;gap:var(--spacing-12);">
+                <span style="color:var(--color-brand-green);font-family:var(--font-geistmono);font-size:10px;">01</span>
+                <div>
+                  <div style="font-family:var(--font-inter);font-size:var(--text-body-sm);font-weight:var(--font-weight-medium);color:var(--color-pure-white);margin-bottom:var(--spacing-4);">Energy model</div>
+                  <p style="font-family:var(--font-inter);font-size:13px;color:var(--color-smoke);line-height:1.6; margin:0;">Base kWh per second at 100% CPU, scaled by language factor and memory ratio.</p>
+                </div>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:var(--spacing-12);">
+                <span style="color:var(--color-brand-green);font-family:var(--font-geistmono);font-size:10px;">02</span>
+                <div>
+                  <div style="font-family:var(--font-inter);font-size:var(--text-body-sm);font-weight:var(--font-weight-medium);color:var(--color-pure-white);margin-bottom:var(--spacing-4);">Carbon intensity</div>
+                  <p style="font-family:var(--font-inter);font-size:13px;color:var(--color-smoke);line-height:1.6;margin:0;">Real-time VA-DOM grid intensity (g CO₂/kWh) from PJM API.</p>
+                </div>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:var(--spacing-12);">
+                <span style="color:var(--color-brand-green);font-family:var(--font-geistmono);font-size:10px;">03</span>
+                <div>
+                  <div style="font-family:var(--font-inter);font-size:var(--text-body-sm);font-weight:var(--font-weight-medium);color:var(--color-pure-white);margin-bottom:var(--spacing-4);">Emission = Energy × Intensity</div>
+                  <p style="font-family:var(--font-inter);font-size:13px;color:var(--color-smoke);line-height:1.6;margin:0;">kWh × g CO₂/kWh = grams of CO₂ per code execution.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Terminal — side by side -->
+    <section class="section" style="padding: var(--spacing-96) var(--spacing-32); background: var(--color-obsidian); border-top: 1px solid var(--color-slate); border-bottom: 1px solid var(--color-slate);">
+      <div class="container">
+        <div class="side-by-side">
+          <div class="terminal-wrap animate-fade-in delay-1" style="flex:1;">
+            <div class="terminal-header">
+              <div class="terminal-dots">
+                <div class="terminal-dot terminal-dot--red"></div>
+                <div class="terminal-dot terminal-dot--yellow"></div>
+                <div class="terminal-dot terminal-dot--green"></div>
+              </div>
+              <div class="terminal-title">carbon-api.log</div>
+            </div>
+            <div class="terminal-lines">
+              <div class="terminal-line terminal-line--prompt">$ <span class="terminal-line--cmd">carbonsense --intensity --real-time</span></div>
+              <div class="terminal-line terminal-line--out">Fetching PJM DOM zone data…</div>
+              <div class="terminal-line terminal-line--out">✓ Connected to grid API</div>
+              <div class="terminal-line terminal-line--hi">Current intensity: 345.4 g CO₂/kWh</div>
+              <div class="terminal-line terminal-line--out">Regional mix: 42% gas, 33% nuclear, 12% coal</div>
+              <div class="terminal-line terminal-line--prompt">$ <span class="terminal-line--cmd">carbonsense --analyze --file src/main.py</span></div>
+              <div class="terminal-line terminal-line--out">Analyzing 247 lines…</div>
+              <div class="terminal-line terminal-line--hi">Estimated emissions: 0.042 g CO₂ per run</div>
+              <div class="terminal-line terminal-line--out">Optimization: Replace recursive fib with iterative</div>
+              <div class="terminal-line terminal-line--out">Potential savings: 68% energy per execution</div>
+              <div class="terminal-line terminal-line--prompt">$ <span class="terminal-line--cmd">_</span><span class="cursor"></span></div>
+            </div>
+          </div>
+
+          <div class="card-key animate-fade-in delay-2" style="flex:1; padding: var(--spacing-40);">
+            <p class="section__eyebrow">Quick start</p>
+            <h2 class="section__title" style="font-size:var(--text-heading-sm);margin-bottom:var(--spacing-24);">Run locally</h2>
+            <div style="background:var(--color-obsidian);border:1px solid var(--color-slate);border-radius:var(--radius-lg);padding:var(--spacing-20);font-family:var(--font-geistmono);font-size:12px;color:var(--color-ash);line-height:1.7;overflow-x:auto;">
+              <code style="color:var(--color-brand-green);">$</code> git clone https://github.com/yourorg/carbonsense-api<br>
+              <code style="color:var(--color-brand-green);">$</code> cd carbonsense-api<br>
+              <code style="color:var(--color-brand-green);">$</code> python -m venv .venv<br>
+              <code style="color:var(--color-brand-green);">$</code> .venv\Scripts\activate<br>
+              <code style="color:var(--color-brand-green);">$</code> pip install -r requirements.txt<br>
+              <code style="color:var(--color-brand-green);">$</code> python run.py<br>
+              <span style="color:var(--color-smoke);"># Opens http://localhost:8000</span>
+            </div>
+            <div style="margin-top:var(--spacing-24);">
+              <a href="docs.html" class="btn btn--brand" style="width:100%;text-align:center;">Read API Docs →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <a href="#" class="footer__logo" aria-label="CarbonSense home">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+          CarbonSense
+        </a>
+        <p class="footer__meta-item">MIT Licensed · 804 Hacks 2026</p>
+      </div>
+
+      <div class="footer__divider" aria-hidden="true"></div>
+
+      <div class="footer__meta">
+        <span class="footer__meta-item">v1.0.0</span>
+        <span class="footer__pipe">|</span>
+        <span class="footer__meta-item">VA-DOM Grid</span>
+        <span class="footer__pipe">|</span>
+        <span class="footer__meta-item">PJM API</span>
+        <span class="footer__pipe">|</span>
+        <span class="footer__meta-item"><a href="contact.html" style="color:var(--color-brand-green);text-decoration:none;">Contact Arnav</a></span>
+      </div>
+
+      <div class="footer__divider" aria-hidden="true"></div>
+
+      <p class="footer__copyright">CarbonSense® Virginia Grid Carbon API</p>
+    </div>
+  </footer>
+
+  <script>
+    // Nav scroll effect
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 20) {
+        nav.style.borderColor = 'var(--color-brand-green)';
+        nav.style.background = 'rgba(4, 5, 6, 0.95)';
+      } else {
+        nav.style.borderColor = 'var(--color-slate)';
+        nav.style.background = 'rgba(4, 5, 6, 0.7)';
+      }
+    }, { passive: true });
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        if (href === '#') return;
+        const target = document.querySelector(href);
+        if (target) {
+          e.preventDefault();
+          const navHeight = 56;
+          const targetPosition = target.getBoundingClientRect().top + window.scrollY - navHeight;
+          window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+        }
+      });
+    });
+
+    // Animated stat counters
+    function animateStat(element) {
+      const target = parseInt(element.getAttribute('data-target'));
+      const duration = 1500;
+      const startTime = performance.now();
+
+      function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        const current = Math.floor(easeOut * target);
+        element.textContent = current;
+        if (progress < 1) {
+          requestAnimationFrame(update);
+        }
+      }
+      requestAnimationFrame(update);
+    }
+
+    const statObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateStat(entry.target);
+          statObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.stat-card__value').forEach(el => statObserver.observe(el));
+
+    // Calculator logic
+    const form = document.getElementById('calcForm');
+    const rangeRuntime = document.getElementById('range-runtime');
+    const rangeCpu = document.getElementById('range-cpu');
+    const rangeMemory = document.getElementById('range-memory');
+    const selectLanguage = document.getElementById('select-language');
+    const valRuntime = document.getElementById('val-runtime');
+    const valCpu = document.getElementById('val-cpu');
+    const valMemory = document.getElementById('val-memory');
+    const resultEmissions = document.getElementById('result-emissions');
+
+    const languageFactors = {
+      python: 1.0,
+      javascript: 0.8,
+      go: 0.5,
+      rust: 0.4,
+      cpp: 0.4,
+      java: 0.7
+    };
+
+    const carbonIntensity = 345.4; // g CO2/kWh VA-DOM
+
+    function calculate() {
+      const runtime = parseFloat(rangeRuntime.value);
+      const cpu = parseFloat(rangeCpu.value) / 100;
+      const memory = parseFloat(rangeMemory.value);
+      const language = selectLanguage.value;
+      const factor = languageFactors[language] || 1.0;
+
+      const baseKwhPerSecond = 0.0001;
+      const energyKwh = runtime * baseKwhPerSecond * cpu * factor * (memory / 256);
+      const emissionsG = energyKwh * carbonIntensity;
+
+      valRuntime.textContent = runtime + 's';
+      valCpu.textContent = (cpu * 100) + '%';
+      valMemory.textContent = memory + ' MB';
+      resultEmissions.textContent = emissionsG.toFixed(4);
+    }
+
+    [rangeRuntime, rangeCpu, rangeMemory, selectLanguage].forEach(input => {
+      input.addEventListener('input', calculate);
+    });
+
+    calculate();
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Tab') document.body.classList.add('keyboard-nav');
+    });
+    document.addEventListener('mousedown', () => document.body.classList.remove('keyboard-nav'));
+  </script>
+</body>
+</html>
