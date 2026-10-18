@@ -97,7 +97,11 @@
       letter-spacing: var(--tracking-body);
       font-weight: var(--font-weight-regular);
       color: var(--color-pure-white);
-      background: var(--color-void-black);
+      background:
+        radial-gradient(circle at 10% 20%, rgba(31, 75, 55, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(212, 175, 55, 0.08) 0%, transparent 40%),
+        var(--color-void-black);
+      background-attachment: fixed;
       -webkit-font-smoothing: antialiased;
     }
 
@@ -134,7 +138,6 @@
       vertical-align: text-bottom;
     }
 
-    /* Glass Nav */
     .nav {
       position: fixed;
       top: 0;
@@ -216,7 +219,6 @@
       gap: var(--spacing-12);
     }
 
-    /* Buttons */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -265,7 +267,6 @@
       transform: translateY(-1px);
     }
 
-    /* Hero */
     .hero {
       padding: var(--spacing-96) var(--spacing-32) var(--spacing-64);
       text-align: center;
@@ -307,7 +308,6 @@
       animation: fadeInUp 0.8s ease-out forwards;
     }
 
-    /* Docs Layout */
     .docs-layout {
       display: grid;
       grid-template-columns: 260px 1fr;
@@ -351,7 +351,7 @@
       font-size: var(--text-body-sm);
       font-weight: var(--font-weight-regular);
       letter-spacing: var(--tracking-body-sm);
-      color: var(--color-silver-mist);
+      color: var(--color-smoke);
       transition: all 0.2s ease;
     }
 
@@ -408,7 +408,6 @@
       margin-bottom: var(--spacing-24);
     }
 
-    /* Endpoint Card */
     .endpoint {
       background: transparent;
       border: 1px solid var(--color-slate);
@@ -518,13 +517,11 @@
     }
 
     .endpoint__example code { color: var(--color-brand-green); }
-
     .endpoint__example .key { color: var(--color-ash); }
     .endpoint__example .str { color: var(--color-brand-green); }
     .endpoint__example .num { color: var(--color-success-green); }
     .endpoint__example .bool { color: var(--color-brand-green); }
 
-    /* Base URL */
     .base-url {
       background: var(--color-ink);
       border: 1px solid var(--color-slate);
@@ -553,7 +550,6 @@
       font-weight: var(--font-weight-medium);
     }
 
-    /* Footer */
     .footer {
       background: var(--color-void-black);
       border-top: 1px solid var(--color-slate);
@@ -574,7 +570,6 @@
       color: var(--color-smoke);
     }
 
-    /* Responsive */
     @media (max-width: 900px) {
       .docs-layout { grid-template-columns: 1fr; gap: var(--spacing-32); }
       .docs-sidebar { position: static; top: auto; }
@@ -623,7 +618,7 @@
         </h1>
         <p class="hero__subtitle delay-3">
           REST endpoints for Virginia grid carbon intensity, code energy estimation, and emission analysis.
-          Base URL: <code style="color: var(--color-brand-green);">https://YOUR-RENDER-API-URL.onrender.com/api/v1</code>
+          Base URL: <code style="color: var(--color-brand-green);">https://eight04hacks-api.onrender.com/api/v1</code>
         </p>
       </div>
     </section>
@@ -639,6 +634,7 @@
             <a href="#carbon-hourly" class="docs-nav__item">GET /carbon/hourly</a>
             <a href="#generation-mix" class="docs-nav__item">GET /carbon/generation-mix</a>
             <a href="#code-analyze" class="docs-nav__item">POST /code/analyze</a>
+            <a href="#code-analyze-file" class="docs-nav__item">POST /code/analyze-file</a>
             <a href="#carbon-compare" class="docs-nav__item">GET /carbon/compare</a>
             <a href="#grid-status" class="docs-nav__item">GET /grid/status</a>
             <a href="#carbon-equivalents" class="docs-nav__item">GET /carbon/equivalents</a>
@@ -722,18 +718,17 @@
           </div>
         </section>
 
-        <!-- Hourly Intensity -->
+        <!-- Hourly -->
         <section id="carbon-hourly" class="docs-section">
           <div class="docs-section__label">Hourly Intensity</div>
           <h2 class="docs-section__title">GET /carbon/hourly</h2>
-          <p class="docs-section__desc">24-hour carbon intensity from 1 AM through 12 AM, with scheduling summary for carbon-aware job planning.</p>
+          <p class="docs-section__desc">24-hour carbon intensity from 1 AM through 12 AM, with scheduling summary.</p>
 
           <div class="endpoint">
             <header class="endpoint__header">
               <span class="endpoint__method endpoint__method--get">GET</span>
               <code class="endpoint__path">/carbon/hourly</code>
             </header>
-            <p class="endpoint__desc">Returns hourly gCO₂/kWh values for all 24 hours plus best-window and dirtiest-hour summary stats.</p>
 
             <div class="endpoint__example">
               <p class="endpoint__example-title">Response</p>
@@ -759,13 +754,7 @@
       <span class="key">"hour"</span>: <span class="num">1</span>,
       <span class="key">"label"</span>: <span class="str">"1 AM"</span>,
       <span class="key">"carbon_intensity_g_per_kwh"</span>: <span class="num">280.5</span>
-    },
-    {
-      <span class="key">"hour"</span>: <span class="num">2</span>,
-      <span class="key">"label"</span>: <span class="str">"2 AM"</span>,
-      <span class="key">"carbon_intensity_g_per_kwh"</span>: <span class="num">275.0</span>
     }
-    <span class="key">...22 more hours</span>
   ]
 }</code></pre>
             </div>
@@ -841,6 +830,53 @@
           </div>
         </section>
 
+        <!-- Code Analyze File Upload -->
+        <section id="code-analyze-file" class="docs-section">
+          <div class="docs-section__label">Code Analysis (File Upload)</div>
+          <h2 class="docs-section__title">POST /code/analyze-file</h2>
+          <p class="docs-section__desc">Upload a source code file to estimate its energy consumption and CO₂ emissions.</p>
+
+          <div class="endpoint">
+            <header class="endpoint__header">
+              <span class="endpoint__method endpoint__method--post">POST</span>
+              <code class="endpoint__path">/code/analyze-file</code>
+            </header>
+            <p class="endpoint__desc">Upload a source code file (.py, .js, .ts, .java, .go, .rs, .cpp, .c, .cs, .rb, .php). The API reads the file and returns its carbon footprint using real-time Virginia grid intensity.</p>
+
+            <div class="endpoint__row">
+              <span class="endpoint__row--label">Form Data</span>
+              <span class="endpoint__row--value"><code>file</code> (required) — source code file</span>
+            </div>
+
+            <div class="endpoint__row">
+              <span class="endpoint__row--label">Form Data</span>
+              <span class="endpoint__row--value"><code>language</code> (optional, default: python)</span>
+            </div>
+
+            <div class="endpoint__example">
+              <p class="endpoint__example-title">curl Example</p>
+              <pre><code>curl -X POST https://eight04hacks-api.onrender.com/api/v1/code/analyze-file \
+  -F "file=@main.py" \
+  -F "language=python"</code></pre>
+            </div>
+
+            <div class="endpoint__example">
+              <p class="endpoint__example-title">Response</p>
+              <pre><code>{
+  <span class="key">"estimated_energy_kwh"</span>: <span class="num">1e-6</span>,
+  <span class="key">"estimated_emissions_g_co2"</span>: <span class="num">0.0004</span>,
+  <span class="key">"carbon_intensity_used_g_per_kwh"</span>: <span class="num">345.4</span>,
+  <span class="key">"breakdown"</span>: {
+    <span class="key">"cpu_wh"</span>: <span class="num">0.001</span>,
+    <span class="key">"total_wh"</span>: <span class="num">0.001</span>,
+    <span class="key">"language"</span>: <span class="str">"python"</span>
+  },
+  <span class="key">"timestamp"</span>: <span class="str">"2026-10-18T14:21:45.896309Z"</span>
+}</code></pre>
+            </div>
+          </div>
+        </section>
+
         <!-- Compare -->
         <section id="carbon-compare" class="docs-section">
           <div class="docs-section__label">Comparison</div>
@@ -856,6 +892,19 @@
             <div class="endpoint__row">
               <span class="endpoint__row--label">Query</span>
               <span class="endpoint__row--value"><code>days</code> (integer, 1–365, default: 30)</span>
+            </div>
+
+            <div class="endpoint__example">
+              <p class="endpoint__example-title">Response</p>
+              <pre><code>{
+  <span class="key">"current_intensity_g_per_kwh"</span>: <span class="num">386.7</span>,
+  <span class="key">"historical_avg_g_per_kwh"</span>: <span class="num">374.6</span>,
+  <span class="key">"historical_min_g_per_kwh"</span>: <span class="num">337.7</span>,
+  <span class="key">"historical_max_g_per_kwh"</span>: <span class="num">416.1</span>,
+  <span class="key">"percentile"</span>: <span class="num">79.8</span>,
+  <span class="key">"period"</span>: <span class="str">"last_30_days"</span>,
+  <span class="key">"data_points"</span>: <span class="num">8640</span>
+}</code></pre>
             </div>
           </div>
         </section>
@@ -889,6 +938,21 @@
             <div class="endpoint__row">
               <span class="endpoint__row--label">Query</span>
               <span class="endpoint__row--value"><code>grams_co2</code> (float, default: 1000)</span>
+            </div>
+
+            <div class="endpoint__example">
+              <p class="endpoint__example-title">Response</p>
+              <pre><code>{
+  <span class="key">"grams_co2"</span>: <span class="num">1000</span>,
+  <span class="key">"equivalents"</span>: {
+    <span class="key">"miles_driven_avg_car"</span>: <span class="num">2.48</span>,
+    <span class="key">"smartphone_charges"</span>: <span class="num">117.6</span>,
+    <span class="key">"led_bulb_hours"</span>: <span class="num">22222.2</span>,
+    <span class="key">"tree_days_to_sequester"</span>: <span class="num">45.66</span>,
+    <span class="key">"coal_grams_burned"</span>: <span class="num">413.2</span>,
+    <span class="key">"natural_gas_cubic_feet"</span>: <span class="num">18.38</span>
+  }
+}</code></pre>
             </div>
           </div>
         </section>

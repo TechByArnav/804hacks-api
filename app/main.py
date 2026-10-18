@@ -167,6 +167,38 @@ async def analyze_code(request: CodeAnalysisRequest) -> CodeEnergyResponse:
     )
 
 
+@app.post("/api/v1/code/analyze-file", response_model=CodeEnergyResponse)
+async def analyze_file(
+    file: UploadFile = File(...),
+    language: str = "python",
+    runtime_seconds: float | None = None,
+    cpu_utilization: float = 0.5,
+    memory_mb: float = 256,
+):
+    content = await file.read()
+    code = content.decode("utf-8", errors="ignore")
+
+    intensity = await virginia_grid.get_current_intensity(real_time=True)
+    carbon_intensity = intensity["carbon_intensity_g_per_kwh"] if intensity else 400.0
+
+    result = code_estimator.estimate(
+        code=code,
+        language=language,
+        runtime_seconds=runtime_seconds,
+        cpu_utilization=cpu_utilization,
+        memory_mb=memory_mb,
+        carbon_intensity_g_per_kwh=carbon_intensity,
+    )
+    return CodeEnergyResponse(
+        estimated_energy_kwh=result["energy_kwh"],
+        estimated_emissions_g_co2=result["emissions_g_co2"],
+        estimated_emissions_lb_co2=result["emissions_lb_co2"],
+        carbon_intensity_used_g_per_kwh=carbon_intensity,
+        breakdown=result["breakdown"],
+        timestamp=datetime.utcnow(),
+    )
+
+
 @app.get("/api/v1/carbon/compare", response_model=HistoricalComparisonResponse)
 async def compare_historical(
     days: int = Query(default=30, ge=1, le=365, description="Days of history for comparison"),
